@@ -36,11 +36,20 @@ public class Vector {
 
     // METHODS
 
-    public int getX() {
+    public int x() {
         return x;
     }
 
-    public int getY() {
+    public int y() {
         return y;
+    }
+
+    public static boolean clockwise(Vector v1, Vector v2, Vector v3) {
+        int dx1 = v2.x() - v1.x();
+        int dx2 = v3.x() - v1.x();
+        int dy1 = v2.y() - v1.y();
+        int dy2 = v3.y() - v1.y();
+
+        return ((dx1 * dy2 - dx2 * dy1) >= 0);
     }
 }
