@@ -21,7 +21,7 @@ package NotDoom.Map;
  *
  * @author 16cassidyandrew
  */
-public class Vertex {
+public class Vector {
     // FIELDS
 
     private int x;
@@ -29,7 +29,7 @@ public class Vertex {
 
     // CONSTRUCTOR
 
-    public Vertex(int x, int y) {
+    public Vector(int x, int y) {
         this.x = x;
         this.y = y;
     }

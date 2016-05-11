@@ -27,16 +27,21 @@ public class Region {
     
     // FIELDS
 
-    private Vertex[] vertexes; //typo preserved for Doom authenticity
+    private Vector[] vertexes; //typo preserved for Doom authenticity
+    private WallData[] wallData;
     private int floor;
     private int ceiling;
 
 
     // CONSTRUCTORS
 
-    public Region(Vertex[] vertexes, int floor, int ceiling) {
+    public Region(Vector[] vertexes, int floor, int ceiling) {
         this.vertexes = vertexes;
         this.floor = floor;
         this.ceiling = ceiling;
     }
+
+
+    // METHODS
+
 }
