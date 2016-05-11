@@ -30,17 +30,20 @@ public class Region {
     // FIELDS
 
     private Vector[] vertexes; //typo preserved for Doom authenticity
-    private WallData[] wallData;
     private ArrayList<Region> neighbors; // other regions visible from this one
     private int floor;
     private int ceiling;
+    private Wall[] walls;
 
 
     // CONSTRUCTORS
 
     public Region(Vector[] vertexes, WallData[] wallData, int floor, int ceiling) {
         this.vertexes = vertexes;
-        this.wallData = wallData;
+        for (int i = 0; i < vertexes.length; i++) {
+            int j = (i + 1) % vertexes.length;
+            walls[i] = new Wall(vertexes[i], vertexes[j], wallData[i]);
+        }
         this.floor = floor;
         this.ceiling = ceiling;
     }
@@ -58,5 +61,17 @@ public class Region {
             if (!Vector.clockwise(vertexes[i], vertexes[j], v)) return false;
         }
         return true;
+    }
+
+    public Wall[] getWalls() {
+        return walls;
+    } 
+
+    public ArrayList<Wall> getVisibleWalls(Vector v) {
+        ArrayList<Wall> visibleWalls = new ArrayList<Wall>();
+        for (int i = 0; i < walls.length; i++) {
+            if (walls[i].visible(v)) visibleWalls.add(walls[i]);
+        }
+        return visibleWalls;
     }
 }
