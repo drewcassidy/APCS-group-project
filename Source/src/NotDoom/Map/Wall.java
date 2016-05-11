@@ -32,4 +32,7 @@ public class Wall extends Line {
         super(v1, v2);
         this.wd = wd;
     }
+
+
+    // METHODS
 }

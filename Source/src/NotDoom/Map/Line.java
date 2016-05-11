@@ -45,7 +45,7 @@ public class Line {
         return v2;
     }
 
-    public boolean visible(Vector v) {
+    public boolean inside(Vector v) {
         return Vector.clockwise(v1, v2, v);
     }
 }

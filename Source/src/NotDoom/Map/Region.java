@@ -30,7 +30,7 @@ public class Region {
     // FIELDS
 
     private Vector[] vertexes; //typo preserved for Doom authenticity
-    private ArrayList<Region> neighbors; // other regions visible from this one
+    private ArrayList<Region> neighbors; // other regions inside from this one
     private int floor;
     private int ceiling;
     private Wall[] walls;
@@ -70,7 +70,21 @@ public class Region {
     public ArrayList<Wall> getVisibleWalls(Vector v) {
         ArrayList<Wall> visibleWalls = new ArrayList<Wall>();
         for (int i = 0; i < walls.length; i++) {
-            if (walls[i].visible(v)) visibleWalls.add(walls[i]);
+            if (walls[i].inside(v)) visibleWalls.add(walls[i]);
+        }
+        return visibleWalls;
+    }
+
+    public ArrayList<Wall> getVisibleWallsRecursive(Vector v, int depth, ArrayList<Region> exclude) {
+        exclude.add(this);
+        ArrayList<Wall> visibleWalls = new ArrayList<>();
+        visibleWalls.addAll(getVisibleWalls(v));
+        if (depth != 0) {
+            for (Region r : neighbors) {
+                if (!exclude.contains(r)) {
+                    visibleWalls.addAll(r.getVisibleWallsRecursive(v, depth - 1, exclude));
+                }
+            }
         }
         return visibleWalls;
     }
