@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package NotDoom.Map;
+package NotDoom;
 
 /**
  *
  * @author 16cassidyandrew
  */
-public class Vector {
+public class IntVector {
     // FIELDS
 
     private int x;
@@ -29,7 +29,7 @@ public class Vector {
 
     // CONSTRUCTOR
 
-    public Vector(int x, int y) {
+    public IntVector(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -44,12 +44,26 @@ public class Vector {
         return y;
     }
 
+    public Vector toVector() {
+        return new Vector(x, y);
+    }
+
     //checks if the points are in a clockwise order
-    public static boolean clockwise(Vector v1, Vector v2, Vector v3) {
+    public static boolean clockwise(IntVector v1, IntVector v2, IntVector v3) {
         int dx1 = v2.x() - v1.x();
         int dx2 = v3.x() - v1.x();
         int dy1 = v2.y() - v1.y();
         int dy2 = v3.y() - v1.y();
+
+        return ((dx1 * dy2 - dx2 * dy1) >= 0);
+    }
+
+    //checks if the points are in a clockwise order
+    public static boolean clockwise(IntVector v1, IntVector v2, Vector v3) {
+        float dx1 = v2.x() - v1.x();
+        float dx2 = v3.x() - v1.x();
+        float dy1 = v2.y() - v1.y();
+        float dy2 = v3.y() - v1.y();
 
         return ((dx1 * dy2 - dx2 * dy1) >= 0);
     }

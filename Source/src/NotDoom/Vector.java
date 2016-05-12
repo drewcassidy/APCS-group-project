@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 16cassidyandrew.
+ * Copyright 2016 16kohnegrant.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,35 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package NotDoom.Map;
-import NotDoom.Renderer.Texture;
+package NotDoom;
+
 /**
  *
- * @author 16cassidyandrew
+ * @author 16kohnegrant
  */
-public class WallData {
-
-    // FIELDS
-
-    private Texture top;
-    private Texture mid;
-    private Texture bot;
-    private boolean transparent;
-
+public class Vector {
+    
+    private float x;
+    private float y;
 
     // CONSTRUCTOR
 
-    public WallData(Texture top, Texture mid, Texture bot, boolean transparent) {
-        this.top = top;
-        this.mid = mid;
-        this.bot = bot;
-        this.transparent = transparent;
+    public Vector(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
-
 
     // METHODS
 
-    public boolean transparent() {
-        return transparent;
+    public float x() {
+        return x;
+    }
+
+    public float y() {
+        return y;
     }
 }

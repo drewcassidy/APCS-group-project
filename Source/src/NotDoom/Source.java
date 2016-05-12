@@ -14,7 +14,7 @@ public class Source {
         // TODO code application logic here
         Frame f = new Frame();
         
-        player p = new player();
+        Player p = new Player();
         
     }
     

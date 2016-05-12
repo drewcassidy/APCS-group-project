@@ -13,31 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package NotDoom;
+package NotDoom.Map;
+
+import NotDoom.Sprite;
+import NotDoom.Enemy;
+import NotDoom.Sprite;
 
 /**
  *
  * @author 16kohnegrant
  */
-public class Position {
+public class Map {
+    //array of regions, array of enemys
+    private Region[] regions;
+    private Sprite[] sprites;
     
-    private float x;
-    private float y;
-
-    // CONSTRUCTOR
-
-    public Position(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    // METHODS
-
-    public float x() {
-        return x;
-    }
-
-    public float y() {
-        return y;
-    }
+    
+    
 }
