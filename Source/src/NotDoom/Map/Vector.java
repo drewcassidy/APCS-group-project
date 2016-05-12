@@ -44,6 +44,7 @@ public class Vector {
         return y;
     }
 
+    //checks if the points are in a clockwise order
     public static boolean clockwise(Vector v1, Vector v2, Vector v3) {
         int dx1 = v2.x() - v1.x();
         int dx2 = v3.x() - v1.x();
