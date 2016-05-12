@@ -19,33 +19,20 @@ package NotDoom.Map;
  *
  * @author 16cassidyandrew
  */
-public class Line {
-    
+public class Wall extends Line {
+
     // FIELDS
+    
+    private WallData wd;
 
-    private Vector v1;
-    private Vector v2;
 
+    // CONSTRUCTORS
 
-    // CONSTRUCTOR
-
-    public Line(Vector v1, Vector v2) {
-        this.v1 = v1;
-        this.v2 = v2;
+    public Wall(Vector v1, Vector v2, WallData wd) {
+        super(v1, v2);
+        this.wd = wd;
     }
 
 
     // METHODS
-
-    public Vector v1() {
-        return v1;
-    }
-
-    public Vector v2() {
-        return v2;
-    }
-
-    public boolean inside(Vector v) {
-        return Vector.clockwise(v1, v2, v);
-    }
 }
