@@ -10,10 +10,8 @@ import java.awt.event.KeyListener;
 
 public class player {
     
-    private int ammo,health, key;    
+    private int ammo, health;    
     private float X,Y,rot;
-    private Key keys;
-    
     
     
     public player(){
@@ -30,25 +28,7 @@ public class player {
         
     }
     
-    private class Key implements KeyListener{
-
-        //wasd, left right turn, space shoot
-        
-        @Override
-        public void keyTyped(KeyEvent e) {}
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            key = e.getKeyCode();
-        
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            key = -1;
-        }
-        
-    }
+    
     
     public void removeAmmo(int amount){
         ammo-=amount;
