@@ -13,20 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package NotDoom.Map;
+package NotDoom;
 
-import NotDoom.Sprite;
-import NotDoom.enemy;
-
-/**
- *
- * @author 16kohnegrant
- */
-public class map {
-    //array of regions, array of enemys
-    private Region[] regions;
-    private Sprite[] sprites;
+public class Enemy extends Sprite{
     
     
+    private int health;    
+    private Vector pos;
     
+    
+    public Enemy(){
+        health = 100;
+        
+        pos= new Vector(0,0);
+    }
+    
+    
+    public void takeDamage(int amount){
+        health-=amount;
+    }
+    
+    public void takeDamage(){
+        takeDamage(1);
+    }
+    
+    public int getHealth(){
+        return health;
+    }
+    
+    public float getX(){
+        return pos.x();
+    }
+    
+    public float getY(){
+        return pos.y();
+    }
 }

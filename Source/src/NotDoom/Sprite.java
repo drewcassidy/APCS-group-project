@@ -22,7 +22,7 @@ import NotDoom.Renderer.Texture;
  */
 public class Sprite {
     //position and a texture
-    private Position pos;
+    private Vector pos;
     private Texture t;
     
     

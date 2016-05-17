@@ -19,14 +19,14 @@ package NotDoom;
  *
  * @author 16kohnegrant
  */
-public class Position {
+public class Vector {
     
     private float x;
     private float y;
 
     // CONSTRUCTOR
 
-    public Position(int x, int y) {
+    public Vector(int x, int y) {
         this.x = x;
         this.y = y;
     }

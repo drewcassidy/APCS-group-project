@@ -15,6 +15,9 @@
  */
 package NotDoom.Map;
 
+import NotDoom.IntVector;
+import NotDoom.Vector;
+
 /**
  *
  * @author 16cassidyandrew
@@ -23,13 +26,13 @@ public class Line {
     
     // FIELDS
 
-    private Vector v1;
-    private Vector v2;
+    private IntVector v1;
+    private IntVector v2;
 
 
     // CONSTRUCTOR
 
-    public Line(Vector v1, Vector v2) {
+    public Line(IntVector v1, IntVector v2) {
         this.v1 = v1;
         this.v2 = v2;
     }
@@ -37,15 +40,15 @@ public class Line {
 
     // METHODS
 
-    public Vector v1() {
+    public IntVector v1() {
         return v1;
     }
 
-    public Vector v2() {
+    public IntVector v2() {
         return v2;
     }
 
     public boolean inside(Vector v) {
-        return Vector.clockwise(v1, v2, v);
+        return IntVector.clockwise(v1, v2, v);
     }
 }

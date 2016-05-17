@@ -14,34 +14,26 @@
  * limitations under the License.
  */
 package NotDoom.Map;
-import NotDoom.Renderer.Texture;
+
 /**
  *
  * @author 16cassidyandrew
  */
-public class WallData {
-
-    // FIELDS
-
-    private Texture top;
-    private Texture mid;
-    private Texture bot;
-    private boolean transparent;
-
-
-    // CONSTRUCTOR
-
-    public WallData(Texture top, Texture mid, Texture bot, boolean transparent) {
-        this.top = top;
-        this.mid = mid;
-        this.bot = bot;
-        this.transparent = transparent;
+public class Neighbor {
+    
+    private Region neighbor;
+    private int index;
+    
+    public Neighbor(Region neighbor, int index) {
+        this.neighbor = neighbor;
+        this.index = index;
     }
 
+    public Region getNeighbor() {
+        return neighbor;
+    }
 
-    // METHODS
-
-    public boolean transparent() {
-        return transparent;
+    public int getIndex() {
+        return index;
     }
 }

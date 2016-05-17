@@ -19,29 +19,21 @@ import NotDoom.Renderer.Texture;
  *
  * @author 16cassidyandrew
  */
-public class WallData {
+public class RegionData {
 
     // FIELDS
 
-    private Texture top;
-    private Texture mid;
-    private Texture bot;
-    private boolean transparent;
+    private Texture ceilingTexture;
+    private Texture floorTexture;
+    private int ceilingHeight;
+    private int floorHeight;
 
 
     // CONSTRUCTOR
 
-    public WallData(Texture top, Texture mid, Texture bot, boolean transparent) {
-        this.top = top;
-        this.mid = mid;
-        this.bot = bot;
-        this.transparent = transparent;
+    public RegionData(Texture ceilingTexture, Texture floorTexture, int ceilingHeight, int floorHeight) {
     }
 
 
     // METHODS
-
-    public boolean transparent() {
-        return transparent;
-    }
 }

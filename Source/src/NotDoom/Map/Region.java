@@ -17,6 +17,8 @@
  */
 package NotDoom.Map;
 
+import NotDoom.Vector;
+import NotDoom.IntVector;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +31,7 @@ public class Region {
     
     // FIELDS
 
-    private Vector[] vertexes; //typo preserved for Doom authenticity
+    private IntVector[] vertexes; //typo preserved for Doom authenticity
     private ArrayList<Region> neighbors; // other regions inside from this one
     private int floor;
     private int ceiling;
@@ -38,9 +40,9 @@ public class Region {
 
     // CONSTRUCTORS
 
-    public Region(Vector[] vertexes, WallData[] wallData, int floor, int ceiling) {
+    public Region(IntVector[] vertexes, WallData[] wallData, int floor, int ceiling) {
         this.vertexes = vertexes;
-        for (int i = 0; i < vertexes.length; i++) {
+        for (int i = 0; i < vertexes.length - 1; i++) {
             int j = (i + 1) % vertexes.length;
             walls[i] = new Wall(vertexes[i], vertexes[j], wallData[i]);
         }
@@ -58,7 +60,7 @@ public class Region {
     public boolean contains(Vector v) {
         for (int i = 0; i < vertexes.length; i++) {
             int j = (i + 1) % vertexes.length;
-            if (!Vector.clockwise(vertexes[i], vertexes[j], v)) return false;
+            if (!IntVector.clockwise(vertexes[i], vertexes[j], v)) return false;
         }
         return true;
     }

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package NotDoom.Map;
+import NotDoom.IntVector;
+import NotDoom.Player;
 
 /**
  *
@@ -28,11 +30,19 @@ public class Wall extends Line {
 
     // CONSTRUCTORS
 
-    public Wall(Vector v1, Vector v2, WallData wd) {
+    public Wall(IntVector v1, IntVector v2, WallData wd) {
         super(v1, v2);
         this.wd = wd;
     }
 
 
     // METHODS
+
+    public boolean visible(Player p) {
+        return inside(p.getPos());
+    }
+
+    public boolean transparent() {
+        return wd.transparent();
+    }
 }
