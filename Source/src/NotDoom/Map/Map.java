@@ -78,17 +78,6 @@ public class Map {
                             regionWallData[region].add(new WallData(null, null, null, transparent));
                             System.out.println("adding line " + index + " with vertex " + split[1]);
                             break ;
-                        case 'e':
-                            int size = tempVertexes.size();
-                            IntVector[] regionVertexes = tempVertexes.toArray(new IntVector[size]);
-                            WallData[]  regionWallData = tempWallData.toArray(new WallData[size]);
-                            regions[index] = new Region(regionVertexes, regionWallData, tempFloor, tempCeiling);
-                            tempVertexes.clear();
-                            tempWallData.clear();
-                            
-                            System.out.println("ending region " + index);
-                            break;
-                            
                     }
                 }
             }
@@ -104,7 +93,7 @@ public class Map {
             int size = regionVertexes[i].size();
             IntVector[] tempVertexes = regionVertexes[i].toArray(new IntVector[size]);
             WallData[] tempWallData = regionWallData[i].toArray(new WallData[size]);
-            regions[i] = new Region(tempVertexes, tempWallData);
+            regions[i] = new Region(tempVertexes, tempWallData, regionData[i]);
         }
     }
 }
