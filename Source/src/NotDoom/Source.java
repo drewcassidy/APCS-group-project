@@ -1,6 +1,8 @@
 
 package NotDoom;
 
+import NotDoom.Map.Map;
+
 /**
  *
  * @author 16cassidyandrew
@@ -15,6 +17,8 @@ public class Source {
         Frame f = new Frame();
         
         Player p = new Player();
+
+        Map map1 = new Map("map1");
         
     }
     

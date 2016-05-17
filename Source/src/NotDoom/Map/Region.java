@@ -42,7 +42,7 @@ public class Region {
 
     public Region(IntVector[] vertexes, WallData[] wallData, int floor, int ceiling) {
         this.vertexes = vertexes;
-        for (int i = 0; i < vertexes.length; i++) {
+        for (int i = 0; i < vertexes.length - 1; i++) {
             int j = (i + 1) % vertexes.length;
             walls[i] = new Wall(vertexes[i], vertexes[j], wallData[i]);
         }

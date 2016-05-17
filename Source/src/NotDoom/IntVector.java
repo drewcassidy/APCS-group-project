@@ -48,6 +48,10 @@ public class IntVector {
         return new Vector(x, y);
     }
 
+    public boolean equals(IntVector v) {
+        return (v.x == x && v.y == y);
+    }
+
     //checks if the points are in a clockwise order
     public static boolean clockwise(IntVector v1, IntVector v2, IntVector v3) {
         int dx1 = v2.x() - v1.x();
