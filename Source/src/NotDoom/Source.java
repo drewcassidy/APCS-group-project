@@ -15,6 +15,8 @@
  */
 package NotDoom;
 
+import NotDoom.Map.Map;
+
 /**
  *
  * @author 16kohnegrant
