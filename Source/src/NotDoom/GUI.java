@@ -12,7 +12,14 @@ public class GUI{
     private JFrame frame;
     
     private JPanel panel;
-    private JLabel label;
+    // |
+    // | 
+    // |       |
+    // |-------|
+    // |  |  |
+    // |  |  |
+    //
+    private JLabel ammo, health, armor;
 
     private ImageComponent image;
 
@@ -26,16 +33,22 @@ public class GUI{
     
     public GUI(){
         frame = new JFrame();
-        frame.setSize(300,400);
+        frame.setSize(800,600);
         frame.setTitle("DOOM");
         
         //image = new ImageComponent();
-        label = new JLabel("Hello");
+        
+        ammo = new JLabel("0");
+        health = new JLabel("100%");
+        armor = new JLabel("0%");
+        
         
         keys = new Key();
         
         panel = new JPanel();
-        panel.add(label);
+        panel.add(ammo);
+        panel.add(health);
+        panel.add(armor);
        
         //panel.add(image);
         panel.addKeyListener(keys);
@@ -95,7 +108,10 @@ public class GUI{
     public void render(){
         
         panel.removeAll();
-        panel.add(label);
+        
+        panel.add(ammo);
+        
+        ammo.setLocation(20, 500);
         //panel.add(image);
         panel.invalidate();
         panel.validate();

@@ -20,6 +20,27 @@ public class ImageComponent extends JComponent
     // Constructor
     // You may choose to have a parameter, such as a String filename,
     // so this class can handle different files without changing the code.
+    
+    public ImageComponent( String filename )
+    {
+        try
+        {
+            // ImageIO.read() returns a BufferedImage object, decoding
+            // the supplied file with an ImageReader, chosen
+            // automatically from registered files. The File is wrapped
+            // in an ImageInputStream object, so we don't need one.
+            // Null is returned, If no registered ImageReader claims to
+            // be able to read the resulting stream.
+            image = ImageIO.read(new File( filename ));
+        }
+        catch (IOException e)
+        {
+            // Lets us know what happened if the file did not read
+            // correctly
+            System.out.println("Error reading dir: " + e.getMessage());
+        }
+    }
+    
     public ImageComponent(BufferedImage im )
     {
         
