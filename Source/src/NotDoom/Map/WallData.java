@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 package NotDoom.Map;
-import NotDoom.Renderer.Texture;
+
+import java.awt.image.BufferedImage;
+
 /**
  *
  * @author 16cassidyandrew
@@ -23,15 +25,15 @@ public class WallData {
 
     // FIELDS
 
-    private Texture top;
-    private Texture mid;
-    private Texture bot;
+    private BufferedImage top;
+    private BufferedImage mid;
+    private BufferedImage bot;
     private boolean transparent;
 
 
     // CONSTRUCTOR
 
-    public WallData(Texture top, Texture mid, Texture bot, boolean transparent) {
+    public WallData(BufferedImage top, BufferedImage mid, BufferedImage bot, boolean transparent) {
         this.top = top;
         this.mid = mid;
         this.bot = bot;

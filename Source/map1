@@ -2,6 +2,9 @@ v0 4 5
 v1 5 5
 v2 5 4
 
+t0 Brickwall.png
+
 r0 10 30
 l0 0 0 0 0 false
-e0
+l1 1 0 0 0 false
+l2 2 0 0 0 false

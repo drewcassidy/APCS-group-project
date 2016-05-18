@@ -32,29 +32,29 @@ public class Region {
     // FIELDS
 
     private IntVector[] vertexes; //typo preserved for Doom authenticity
-    private ArrayList<Region> neighbors; // other regions inside from this one
-    private int floor;
-    private int ceiling;
+    private Region[] neighbors; // other regions inside from this one
+    private RegionData regionData;
     private Wall[] walls;
 
 
     // CONSTRUCTORS
 
-    public Region(IntVector[] vertexes, WallData[] wallData, int floor, int ceiling) {
+    public Region(IntVector[] vertexes, WallData[] wallData, RegionData regionData) {
+        walls = new Wall[vertexes.length];
         this.vertexes = vertexes;
         for (int i = 0; i < vertexes.length - 1; i++) {
             int j = (i + 1) % vertexes.length;
             walls[i] = new Wall(vertexes[i], vertexes[j], wallData[i]);
         }
-        this.floor = floor;
-        this.ceiling = ceiling;
+        this.regionData = regionData;
+        neighbors = new Region[vertexes.length];
     }
 
 
     // METHODS
 
-    public void addNeighbor(Region r) {
-        neighbors.add(r);
+    public void addNeighbor(int index, Region r) {
+        neighbors[index] = r;
     }
 
     public boolean contains(Vector v) {

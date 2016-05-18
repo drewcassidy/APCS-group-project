@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 package NotDoom.Map;
-import NotDoom.Renderer.Texture;
+
+import java.awt.image.BufferedImage;
+
 /**
  *
  * @author 16cassidyandrew
@@ -23,15 +25,15 @@ public class RegionData {
 
     // FIELDS
 
-    private Texture ceilingTexture;
-    private Texture floorTexture;
+    private BufferedImage ceilingTexture;
+    private BufferedImage floorTexture;
     private int ceilingHeight;
     private int floorHeight;
 
 
     // CONSTRUCTOR
 
-    public RegionData(Texture ceilingTexture, Texture floorTexture, int ceilingHeight, int floorHeight) {
+    public RegionData(BufferedImage ceilingTexture, BufferedImage floorTexture, int ceilingHeight, int floorHeight) {
     }
 
 

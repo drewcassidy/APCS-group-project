@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package NotDoom;
-import NotDoom.Renderer.Texture;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -23,7 +23,7 @@ import NotDoom.Renderer.Texture;
 public class Sprite {
     //position and a texture
     private Vector pos;
-    private Texture t;
+    private BufferedImage t;
     
     
 }

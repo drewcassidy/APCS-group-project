@@ -17,9 +17,11 @@ package NotDoom.Map;
 
 import NotDoom.IntVector;
 import NotDoom.Sprite;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -30,16 +32,20 @@ public class Map {
     private Region[] regions;
     private Sprite[] sprites;
 
+    private final int MAPSIZE = 500;
+
     public Map(String path) {
-        String[] texturePaths = new String[65536];
-        IntVector[] vertexes = new IntVector[65536];
-        Region[] regions = new Region[65536];
-        ArrayList<IntVector>[] regionVertexes = new ArrayList[65536];
-        ArrayList<WallData>[]  regionWallData = new ArrayList[65536];
-        RegionData[] regionData = new RegionData[65536];
+        BufferedImage[] textures = new BufferedImage[MAPSIZE];
+        IntVector[] vertexes = new IntVector[MAPSIZE];
+        Region[] regions = new Region[MAPSIZE];
+        ArrayList<IntVector>[] regionVertexes = new ArrayList[MAPSIZE];
+        ArrayList<WallData>[]  regionWallData = new ArrayList[MAPSIZE];
+        HashMap<Integer, Integer>[] regionNeighbors = new HashMap[MAPSIZE];
+        RegionData[] regionData = new RegionData[MAPSIZE];
 
         int tempFloor = -1;
         int tempCeiling = -1;
+        int regionCount = 0;
 
         try {
             FileReader fr = new FileReader(path);
@@ -55,7 +61,7 @@ public class Map {
 
                     switch (key) {
                         case 't':
-                            texturePaths[index] = split[1];
+                            textures[index] = ImageIO.read(new File(split[1]));
                             System.out.println("adding texture " + index + " at " + split[1]);
                             break;
                         case 'v':
@@ -67,6 +73,8 @@ public class Map {
                             regionData[index] = new RegionData(null, null, Integer.parseInt(split[1]), Integer.parseInt(split[2]));
                             regionWallData[index] = new ArrayList<WallData>();
                             regionVertexes[index] = new ArrayList<IntVector>();
+                            regionNeighbors[index] = new HashMap<Integer, Integer>();
+                            regionCount++;
                             System.out.println("starting region " + index);
                             break;
                         case 'l':
@@ -75,9 +83,14 @@ public class Map {
                             int mid = Integer.parseInt(split[3]);
                             int bot = Integer.parseInt(split[4]);
                             boolean transparent = Boolean.parseBoolean(split[5]);
-                            regionWallData[region].add(new WallData(null, null, null, transparent));
+                            regionWallData[region].add(
+                                new WallData(textures[top], textures[mid], textures[bot], transparent)
+                            );
+                            if (split.length >= 7) {
+                                regionNeighbors[region].put(Integer.parseInt(split[1]), Integer.parseInt(split[6]));
+                            }
                             System.out.println("adding line " + index + " with vertex " + split[1]);
-                            break ;
+                            break;
                     }
                 }
             }
@@ -86,14 +99,23 @@ public class Map {
             System.out.println("Could not find file " + path);
             
         } catch (IOException e) {
+            System.out.println("Unknown IO error");
 
         }
 
-        for (int i = 0; i < regionData.length; i++) {
+        System.out.println("done reading " + path);
+
+        for (int i = 0; i < regionCount; i++) {
             int size = regionVertexes[i].size();
             IntVector[] tempVertexes = regionVertexes[i].toArray(new IntVector[size]);
             WallData[] tempWallData = regionWallData[i].toArray(new WallData[size]);
             regions[i] = new Region(tempVertexes, tempWallData, regionData[i]);
+            for (int j = 0; j < size; j++) {
+                if (regionNeighbors[i].containsKey(j)) {
+                    Region neighbor = regions[regionNeighbors[i].get(j)];
+                    regions[i].addNeighbor(j, neighbor);
+                }
+            }
         }
     }
 }
