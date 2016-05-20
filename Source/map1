@@ -63,7 +63,7 @@ v54 15 18
 
 t0 Brickwall.png
 t1 Rusty.png
-t2 rivets.png
+t2 Rivets.png
 
 -- starting room
 r0 1 1 10 20
@@ -173,7 +173,6 @@ n1 9
 n3 6
 
 -- left room
-
 r9 1 1 5 20
 l0 23 0
 l1 24 0
