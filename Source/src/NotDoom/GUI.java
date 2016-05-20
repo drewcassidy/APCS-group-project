@@ -20,7 +20,7 @@ public class GUI{
     
     private JLabel ammo, health, armor;
 
-    private MainScreen image, image2, main, blank;
+    private MainScreen image, image2, mainScreen, mapScreen;
     
     private int WIDTH = 800, HEIGHT = 600;
 
@@ -46,12 +46,12 @@ public class GUI{
         frame.setTitle("DOOM");
         
         buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        main = new MainScreen(buffer);
+        mainScreen = new MainScreen(buffer);
         renderer = new DoomRenderer(buffer);
 
         image = new MainScreen("nb.png");
         image2 = new MainScreen("nb.png");
-        blank = new MainScreen("blank.png");
+        mapScreen = new MainScreen("blank.png");
         
         ammo = new JLabel("0");
         health = new JLabel("100%");
@@ -74,7 +74,7 @@ public class GUI{
         //hotBar.add(ammoPanel);
         
         screen = new JPanel();
-        screen.add(main);
+        screen.add(mainScreen);
         
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
@@ -114,7 +114,7 @@ public class GUI{
         public void keyPressed(KeyEvent e) {
             key = e.getKeyCode();
             if (key == KeyEvent.VK_U){
-                blank.tabed(true);
+                mapScreen.tabed(true);
             }
             System.out.println("typed");
         }
@@ -123,7 +123,7 @@ public class GUI{
         public void keyReleased(KeyEvent e) {
             key = -1;
             tab = false;
-            blank.tabed(false);
+            mapScreen.tabed(false);
         
         }
             
@@ -157,10 +157,11 @@ public class GUI{
         mainPanel.removeAll();
         
         if (tab == true){
-            mainPanel.add(blank);
+            mainPanel.add(mapScreen);
         }
         
         else {
+            renderer.DrawRegion(m.currentRegion());
 
             //healthPanel.add(health);
             healthPanel.add(image);
@@ -172,7 +173,7 @@ public class GUI{
             //hotBar.add(healthPanel);
             //hotBar.add(ammoPanel);
             
-            screen.add(main);
+            screen.add(mainScreen);
 
             mainPanel.setLayout(new GridBagLayout());
             c = new GridBagConstraints();        

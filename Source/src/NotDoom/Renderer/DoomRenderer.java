@@ -28,5 +28,8 @@ public class DoomRenderer {
     public DoomRenderer(BufferedImage buffer) {
         this.buffer = buffer;
     }
-    
+
+    public void DrawRegion(Region r) {
+
+    }
 }
