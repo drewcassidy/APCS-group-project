@@ -63,12 +63,77 @@ v54 15 18
 
 t0 Brickwall.png
 t1 Rusty.png
+t2 rivets.png
 
-r0 1 1 0 10
-l0 0 0 0 0 false
-l1 1 0 0 0 false
-l2 2 0 0 0 true 1
-l3 3 0 0 0 false 
-l4 4 0 0 0 false
-l5 5 0 0 0 false
+-- starting room
+r0 1 1 10 20
+l0 0 0
+l1 1 0
+l2 2 0
+l3 3 0
+l4 4 0
+l5 5 0
+
+n2 1
+
+-- hallway
+r1 1 1 0 10
+l0 2 0
+l1 6 1
+l2 7 0
+l3 3 1
+
+n1 2
+n3 0
+
+-- room 1
+r2 1 1 2 11
+l0 6 0
+l1 8 1
+l2 9 0
+l3 7 1
+
+n1 3
+n3 1
+
+r3 1 1 4 12
+l0 8  0
+l1 10 0
+l2 11 0
+l3 12 0
+l4 13 0
+l5 14 0
+l6 9 1
+
+n2 4
+n6 2
+
+-- hallway
+r4 1 1 4 10
+l0 11 2
+l1 15 1
+l2 16 2
+l3 12 1
+
+n1 5
+n3 3
+
+-- room 2
+r5 1 1 4 15
+l0 15 0
+l1 20 1
+l2 19 1
+l3 18 1
+l4 17 0
+l5 16 0
+
+n1 6
+n3 7
+n5 4
+
+
+
+
+
+
  

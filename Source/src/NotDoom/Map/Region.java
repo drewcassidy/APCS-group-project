@@ -19,6 +19,7 @@ package NotDoom.Map;
 
 import NotDoom.Vector;
 import NotDoom.IntVector;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -39,12 +40,12 @@ public class Region {
 
     // CONSTRUCTORS
 
-    public Region(IntVector[] vertexes, WallData[] wallData, RegionData regionData) {
+    public Region(IntVector[] vertexes, BufferedImage[] textures, RegionData regionData) {
         walls = new Wall[vertexes.length];
         this.vertexes = vertexes;
         for (int i = 0; i < vertexes.length - 1; i++) {
             int j = (i + 1) % vertexes.length;
-            walls[i] = new Wall(vertexes[i], vertexes[j], wallData[i]);
+            walls[i] = new Wall(vertexes[i], vertexes[j], textures[i]);
         }
         this.regionData = regionData;
         neighbors = new Region[vertexes.length];

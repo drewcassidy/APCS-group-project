@@ -16,6 +16,7 @@
 package NotDoom.Map;
 import NotDoom.IntVector;
 import NotDoom.Player;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -25,14 +26,14 @@ public class Wall extends Line {
 
     // FIELDS
     
-    private WallData wd;
+    private BufferedImage texture;
 
 
     // CONSTRUCTORS
 
-    public Wall(IntVector v1, IntVector v2, WallData wd) {
+    public Wall(IntVector v1, IntVector v2, BufferedImage texture) {
         super(v1, v2);
-        this.wd = wd;
+        this.texture = texture;
     }
 
 
@@ -40,9 +41,5 @@ public class Wall extends Line {
 
     public boolean visible(Player p) {
         return inside(p.getPos());
-    }
-
-    public boolean transparent() {
-        return wd.transparent();
     }
 }

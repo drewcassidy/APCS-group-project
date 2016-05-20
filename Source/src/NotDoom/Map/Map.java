@@ -37,9 +37,9 @@ public class Map {
     public Map(String path) {
         BufferedImage[] textures = new BufferedImage[MAPSIZE];
         IntVector[] vertexes = new IntVector[MAPSIZE];
-        Region[] regions = new Region[MAPSIZE];
+        regions = new Region[MAPSIZE];
         ArrayList<IntVector>[] regionVertexes = new ArrayList[MAPSIZE];
-        ArrayList<WallData>[]  regionWallData = new ArrayList[MAPSIZE];
+        ArrayList<BufferedImage>[] regionTextures = new ArrayList[MAPSIZE];
         HashMap<Integer, Integer>[] regionNeighbors = new HashMap[MAPSIZE];
         RegionData[] regionData = new RegionData[MAPSIZE];
 
@@ -53,11 +53,12 @@ public class Map {
             String line; 
 
             while ((line = br.readLine()) != null) {
-                if (!line.isEmpty()) {
-                    String[] split = line.split(" ");
+                if (!line.isEmpty() && Character.isLetter(line.charAt(0))) {
+                    String[] split = line.split("\\s+");
                     char key = split[0].charAt(0);
                     int index = Integer.parseInt(split[0].substring(1));
                     int region = 0;
+                    System.out.println(split.length);
 
                     switch (key) {
                         case 't':
@@ -70,8 +71,17 @@ public class Map {
                             break;
                         case 'r':
                             region = index;
-                            regionData[index] = new RegionData(null, null, Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-                            regionWallData[index] = new ArrayList<WallData>();
+                            int floorHeight = 0;
+                            int ceilingHeight = 10;
+                            BufferedImage floorTexture = null;
+                            BufferedImage ceilingTexture = null;
+
+                            if (split.length > 1) floorHeight = Integer.parseInt(split[1]);
+                            if (split.length > 2) ceilingHeight = Integer.parseInt(split[2]);
+                            if (split.length > 3) floorTexture = textures[Integer.parseInt(split[3])];
+                            if (split.length > 4) ceilingTexture = textures[Integer.parseInt(split[4])];
+                            regionData[index] = new RegionData(ceilingTexture, floorTexture, ceilingHeight, floorHeight);
+                            regionTextures[index] = new ArrayList<BufferedImage>();
                             regionVertexes[index] = new ArrayList<IntVector>();
                             regionNeighbors[index] = new HashMap<Integer, Integer>();
                             regionCount++;
@@ -79,17 +89,15 @@ public class Map {
                             break;
                         case 'l':
                             regionVertexes[region].add(vertexes[Integer.parseInt(split[1])]);
-                            int top = Integer.parseInt(split[2]);
-                            int mid = Integer.parseInt(split[3]);
-                            int bot = Integer.parseInt(split[4]);
-                            boolean transparent = Boolean.parseBoolean(split[5]);
-                            regionWallData[region].add(
-                                new WallData(textures[top], textures[mid], textures[bot], transparent)
-                            );
-                            if (split.length >= 7) {
-                                regionNeighbors[region].put(Integer.parseInt(split[1]), Integer.parseInt(split[6]));
+                            BufferedImage texture = null;
+                            if (split.length > 2) {
+                                texture = textures[Integer.parseInt(split[2])];
                             }
+                            regionTextures[region].add(texture);
                             System.out.println("adding line " + index + " with vertex " + split[1]);
+                            break;
+                        case 'n':
+                            regionNeighbors[region].put(index, Integer.parseInt(split[1]));
                             break;
                     }
                 }
@@ -108,8 +116,8 @@ public class Map {
         for (int i = 0; i < regionCount; i++) {
             int size = regionVertexes[i].size();
             IntVector[] tempVertexes = regionVertexes[i].toArray(new IntVector[size]);
-            WallData[] tempWallData = regionWallData[i].toArray(new WallData[size]);
-            regions[i] = new Region(tempVertexes, tempWallData, regionData[i]);
+            BufferedImage[] tempTextures = regionTextures[i].toArray(new BufferedImage[size]);
+            regions[i] = new Region(tempVertexes, tempTextures, regionData[i]);
             for (int j = 0; j < size; j++) {
                 if (regionNeighbors[i].containsKey(j)) {
                     Region neighbor = regions[regionNeighbors[i].get(j)];
@@ -117,5 +125,7 @@ public class Map {
                 }
             }
         }
+
+        System.out.println("done building map");
     }
 }
