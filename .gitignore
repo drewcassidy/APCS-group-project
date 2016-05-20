@@ -13,3 +13,9 @@ hs_err_pid*
 /Source/nbproject/private/
 /Source/build/
 /Source/dist/
+
+# Windows
+*.db
+
+# OS X
+.ds_store
