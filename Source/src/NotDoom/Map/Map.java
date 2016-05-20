@@ -58,7 +58,6 @@ public class Map {
                     char key = split[0].charAt(0);
                     int index = Integer.parseInt(split[0].substring(1));
                     int region = 0;
-                    System.out.println(split.length);
 
                     switch (key) {
                         case 't':
