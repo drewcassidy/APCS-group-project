@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 16kohnegrant.
+ * Copyright 2016 16cassidyandrew.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package NotDoom;
-
-import NotDoom.Map.Map;
+package NotDoom.Renderer;
+import NotDoom.Map.*;
+import java.awt.image.BufferedImage;
 
 /**
  *
- * @author 16kohnegrant
+ * @author 16cassidyandrew
  */
-public class Source {
+public class DoomRenderer {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        
-        Map m = new Map("map1");
-        GUI g = new GUI(m);
-        
-        
+    private BufferedImage buffer;
+
+    public DoomRenderer(BufferedImage buffer) {
+        this.buffer = buffer;
     }
     
 }

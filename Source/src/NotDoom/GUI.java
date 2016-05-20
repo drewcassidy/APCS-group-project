@@ -6,6 +6,7 @@ import NotDoom.Map.Map;
 import NotDoom.Renderer.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
@@ -19,7 +20,7 @@ public class GUI{
     
     private JLabel ammo, health, armor;
 
-    private MainScreen image, image2, im3, blank;
+    private MainScreen image, image2, main, blank;
     
     private int WIDTH = 800, HEIGHT = 600;
 
@@ -31,6 +32,9 @@ public class GUI{
     private KeyListener keys;
     
     private GridBagConstraints c;
+
+    private DoomRenderer renderer;
+    private BufferedImage buffer;
     
     
     public GUI(Map m){
@@ -41,9 +45,12 @@ public class GUI{
         frame.setSize(WIDTH, HEIGHT);
         frame.setTitle("DOOM");
         
+        buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        main = new MainScreen(buffer);
+        renderer = new DoomRenderer(buffer);
+
         image = new MainScreen("nb.png");
         image2 = new MainScreen("nb.png");
-        im3 = new MainScreen("np.png");
         blank = new MainScreen("blank.png");
         
         ammo = new JLabel("0");
@@ -67,7 +74,7 @@ public class GUI{
         //hotBar.add(ammoPanel);
         
         screen = new JPanel();
-        screen.add(im3);
+        screen.add(main);
         
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
@@ -176,7 +183,7 @@ public class GUI{
         //hotBar.add(ammoPanel);
         
         
-        screen.add(im3);
+        screen.add(main);
 
         mainPanel.setLayout(new GridBagLayout());
         c = new GridBagConstraints();        
