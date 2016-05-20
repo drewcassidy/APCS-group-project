@@ -139,11 +139,6 @@ public class GUI{
             tick = 0;
             System.out.println("Word");
             //label.setText(key+"");
-            
-            
-            
-            
-            
         }
         
     }
@@ -153,8 +148,6 @@ public class GUI{
         
         Rectangle box = new Rectangle ( 50, 20, 100, 75);
         g2.draw(box);
-        
-        
     }
     
     
@@ -168,64 +161,55 @@ public class GUI{
         }
         
         else {
-        
-        
-        
 
-        //healthPanel.add(health);
-        healthPanel.add(image);
-        
-        //ammoPanel.add(ammo);
-        ammoPanel.add(image2);
-;
-        //hotBar.setLayout(new GridLayout(1,2));
-        //hotBar.add(healthPanel);
-        //hotBar.add(ammoPanel);
-        
-        
-        screen.add(main);
+            //healthPanel.add(health);
+            healthPanel.add(image);
+            
+            //ammoPanel.add(ammo);
+            ammoPanel.add(image2);
 
-        mainPanel.setLayout(new GridBagLayout());
-        c = new GridBagConstraints();        
-        c.fill = GridBagConstraints.NONE;
-        
-        c.gridx = 0;
-        c.gridy = 0;
-        
-        c.gridwidth = 2;
-        //c.gridheight = 2;
-        c.ipady = HEIGHT-100;
-        c.ipadx = WIDTH;
-        
-        mainPanel.add(screen, c);
-        
-        //c.fill = GridBagConstraints.VERTICAL;
-        c.gridx = 0;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        c.ipady = 300;
-        c.ipadx = WIDTH/2;
-        c.anchor = GridBagConstraints.FIRST_LINE_START;
-        
-        mainPanel.add(healthPanel,c);
-        
-        //c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 1;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        c.anchor = GridBagConstraints.FIRST_LINE_START;
-        
-        mainPanel.add(ammoPanel,c);
-        
+            //hotBar.setLayout(new GridLayout(1,2));
+            //hotBar.add(healthPanel);
+            //hotBar.add(ammoPanel);
+            
+            screen.add(main);
+
+            mainPanel.setLayout(new GridBagLayout());
+            c = new GridBagConstraints();        
+            c.fill = GridBagConstraints.NONE;
+            
+            c.gridx = 0;
+            c.gridy = 0;
+            
+            c.gridwidth = 2;
+            //c.gridheight = 2;
+            c.ipady = HEIGHT-100;
+            c.ipadx = WIDTH;
+            
+            mainPanel.add(screen, c);
+            
+            //c.fill = GridBagConstraints.VERTICAL;
+            c.gridx = 0;
+            c.gridy = 1;
+            c.gridwidth = 1;
+            c.ipady = 300;
+            c.ipadx = WIDTH/2;
+            c.anchor = GridBagConstraints.FIRST_LINE_START;
+            
+            mainPanel.add(healthPanel,c);
+            
+            //c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 1;
+            c.gridy = 1;
+            c.gridwidth = 1;
+            c.anchor = GridBagConstraints.FIRST_LINE_START;
+            
+            mainPanel.add(ammoPanel,c);
         }
-      
-        
-
          
         mainPanel.invalidate();
         mainPanel.validate();
         mainPanel.repaint();
-        
     }
     
     
@@ -280,13 +264,5 @@ public class GUI{
             tickTimer=60;
             run();
         }
-        
-            
     }
-     
-     
-    
-    
-    
-    
 }
