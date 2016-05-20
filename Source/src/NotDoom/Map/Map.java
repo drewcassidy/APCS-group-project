@@ -93,7 +93,7 @@ public class Map {
             int size = regionVertexes[i].size();
             IntVector[] tempVertexes = regionVertexes[i].toArray(new IntVector[size]);
             WallData[] tempWallData = regionWallData[i].toArray(new WallData[size]);
-            regions[i] = new Region(tempVertexes, tempWallData, regionData[i]);
+            //regions[i] = new Region(tempVertexes, tempWallData, regionData[i]);
         }
     }
 }
