@@ -13,15 +13,16 @@ import javax.swing.JComponent;
 
 // Our ImageComponent will inherit all the properties of a JComponent,
 // allowing it to be added to a JPanel or JFrame.
-public class ImageComponent extends JComponent
+public class MainScreen extends JComponent
 {
     //We will use a BufferedImage object to get the image from a file.
     private BufferedImage image;
+    private boolean tab;
     // Constructor
     // You may choose to have a parameter, such as a String filename,
     // so this class can handle different files without changing the code.
     
-    public ImageComponent( String filename )
+    public MainScreen( String filename )
     {
         try
         {
@@ -41,7 +42,11 @@ public class ImageComponent extends JComponent
         }
     }
     
-    public ImageComponent(BufferedImage im )
+    public void tabed(boolean t){
+        tab = t;      
+    }
+    
+    public MainScreen(BufferedImage im )
     {
         
             // ImageIO.read() returns a BufferedImage object, decoding
@@ -72,10 +77,15 @@ public class ImageComponent extends JComponent
     // We will need to override the paint method in order to Ã¢â‚¬Å“drawÃ¢â‚¬Â the image.
     public void paint( Graphics g )
     {
+        if(tab == true){
+            
+        }
+        else{
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         int x = (this.getWidth() - image.getWidth(null)) / 2;
         int y = (this.getHeight() - image.getHeight(null)) / 2;
         g2d.drawImage(image, x, y, null);
+        }
     }
 }

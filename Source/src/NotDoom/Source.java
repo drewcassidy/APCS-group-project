@@ -28,8 +28,10 @@ public class Source {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
         Map m = new Map("map1");
         GUI g = new GUI();
+        
         
     }
     

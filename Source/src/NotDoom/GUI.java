@@ -2,7 +2,8 @@
 package NotDoom;
 
 
-import NotDoom.Renderer.ImageComponent;
+import NotDoom.Map.Map;
+import NotDoom.Renderer.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -13,20 +14,16 @@ public class GUI{
     private JFrame frame;
     
     private JPanel mainPanel, screen, hotBar, ammoPanel, healthPanel;
-    // |
-    // | 
-    // |       |
-    // |-------|
-    // |  |  | |
-    // |  |  | |
-    //
+    
+    private Map m;
+    
     private JLabel ammo, health, armor;
 
-    private ImageComponent image, image2, im3;
+    private MainScreen image, image2, im3, blank;
     
     private int WIDTH = 800, HEIGHT = 600;
 
-    private boolean running;
+    private boolean running, tab;
     private int tick, tickTimer;
     
     private int key;
@@ -36,16 +33,18 @@ public class GUI{
     private GridBagConstraints c;
     
     
-    public GUI(){
+    public GUI(Map m){
+        this.m = m;
         c = new GridBagConstraints();
         
         frame = new JFrame();
         frame.setSize(WIDTH, HEIGHT);
         frame.setTitle("DOOM");
         
-        image = new ImageComponent("nb.png");
-        image2 = new ImageComponent("nb.png");
-        im3 = new ImageComponent("np.png");
+        image = new MainScreen("nb.png");
+        image2 = new MainScreen("nb.png");
+        im3 = new MainScreen("np.png");
+        blank = new MainScreen("blank.png");
         
         ammo = new JLabel("0");
         health = new JLabel("100%");
@@ -107,12 +106,17 @@ public class GUI{
         @Override
         public void keyPressed(KeyEvent e) {
             key = e.getKeyCode();
+            if (key == KeyEvent.VK_U){
+                blank.tabed(true);
+            }
             System.out.println("typed");
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
             key = -1;
+            tab = false;
+            blank.tabed(false);
         
         }
             
@@ -137,11 +141,29 @@ public class GUI{
         
     }
     
+    public void paint(Graphics g){
+        Graphics2D g2 = (Graphics2D) g;
+        
+        Rectangle box = new Rectangle ( 50, 20, 100, 75);
+        g2.draw(box);
+        
+        
+    }
+    
+    
     public void render(){
         
-        //pie cookie F
         
         mainPanel.removeAll();
+        
+        if (tab == true){
+            mainPanel.add(blank);
+        }
+        
+        else {
+        
+        
+        
 
         //healthPanel.add(health);
         healthPanel.add(image);
@@ -188,14 +210,11 @@ public class GUI{
         
         mainPanel.add(ammoPanel,c);
         
+        }
+      
+        
 
-        
-        
-        
-   
-        
-        
-        //panel.add(image);
+         
         mainPanel.invalidate();
         mainPanel.validate();
         mainPanel.repaint();
@@ -226,6 +245,7 @@ public class GUI{
             if (delta >= 1){
                 
                 tick();
+                
                 render();
                 
             //display fps(1 line)
