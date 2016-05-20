@@ -30,7 +30,7 @@ public class Source {
         // TODO code application logic here
         
         Map m = new Map("map1");
-        GUI g = new GUI();
+        GUI g = new GUI(m);
         
         
     }
