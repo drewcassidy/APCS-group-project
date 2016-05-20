@@ -70,6 +70,17 @@ public class Region {
         return walls;
     } 
 
+    public ArrayList<Wall> getSolidWalls() {
+        ArrayList<Wall> solidWalls = new ArrayList<>();
+        for (int i = 0; i < walls.length; i++) {
+            if (neighbors[i] != null) {
+                solidWalls.add(walls[i]);
+            }
+        }
+
+        return solidWalls;
+    }
+
     public ArrayList<Wall> getVisibleWalls(Vector v) {
         ArrayList<Wall> visibleWalls = new ArrayList<Wall>();
         for (int i = 0; i < walls.length; i++) {
