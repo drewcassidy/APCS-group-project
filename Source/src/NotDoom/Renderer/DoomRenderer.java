@@ -40,8 +40,14 @@ public class DoomRenderer {
     }
 
     public void DrawPixel(int x, int y, int c) {
+        System.out.println("drawing pixel " + c);
         backBuffer[x + y * WIDTH] = c;
-        
+    }
+
+    public void DrawColumn(int x, int y1, int y2, int height, int offset, BufferedImage texture) {
+        for (int y = y1; y <= y2; y++) {
+            DrawPixel(x, y, texture.getRGB(offset % texture.getWidth(), (int) ((float) (y - y1) / (y2 - y1) * height % texture.getHeight())));
+        }
     }
 
     public void DrawFrame() {

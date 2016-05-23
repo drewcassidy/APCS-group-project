@@ -7,11 +7,14 @@ import NotDoom.Renderer.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 import javax.swing.*;
 
 public class GUI{
-    
+    private final int FPS = 30;
     private JFrame frame;
     
     private JPanel mainPanel, screen, hotBar, ammoPanel, healthPanel;
@@ -35,9 +38,11 @@ public class GUI{
 
     private DoomRenderer renderer;
     private BufferedImage buffer;
+
+    private BufferedImage testImage;
     
     
-    public GUI(Map m){
+    public GUI(Map m) throws IOException{
         this.m = m;
         c = new GridBagConstraints();
         
@@ -98,6 +103,7 @@ public class GUI{
         frame.setVisible(true);
         frame.setResizable(false);
         
+        testImage = ImageIO.read(new File("nb.png"));
         
         run();
         
@@ -163,6 +169,7 @@ public class GUI{
         else {
             renderer.DrawRegion(m.currentRegion());
             renderer.DrawPixel(15, tick, 0xFF00FF);
+            renderer.DrawColumn(10, 40, 200, 512, 32, testImage);
             renderer.DrawFrame();
 
             //healthPanel.add(health);
@@ -217,8 +224,7 @@ public class GUI{
     
     
      public void run(){
-        int fps = 60;
-        double timePerTick = 1000000000 / fps;
+        double timePerTick = 1000000000 / FPS;
         double delta = 0;
         long now;
         long lastTime = System.nanoTime();

@@ -37,7 +37,6 @@ public class Map {
     public Map(String path) {
         BufferedImage[] textures = new BufferedImage[MAPSIZE];
         IntVector[] vertexes = new IntVector[MAPSIZE];
-        regions = new Region[MAPSIZE];
         ArrayList<IntVector>[] regionVertexes = new ArrayList[MAPSIZE];
         ArrayList<BufferedImage>[] regionTextures = new ArrayList[MAPSIZE];
         HashMap<Integer, Integer>[] regionNeighbors = new HashMap[MAPSIZE];
@@ -114,6 +113,7 @@ public class Map {
 
         System.out.println("done reading " + path);
 
+        regions = new Region[regionCount];
         for (int i = 0; i < regionCount; i++) {
             int size = regionVertexes[i].size();
             IntVector[] tempVertexes = regionVertexes[i].toArray(new IntVector[size]);
