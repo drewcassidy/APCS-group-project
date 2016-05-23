@@ -15,6 +15,7 @@
  */
 package NotDoom.Renderer;
 import NotDoom.Map.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
@@ -24,12 +25,29 @@ import java.awt.image.BufferedImage;
 public class DoomRenderer {
 
     private BufferedImage buffer;
+    private int[] backBuffer;
+    private final int WIDTH;
+    private final int HEIGHT;
 
     public DoomRenderer(BufferedImage buffer) {
         this.buffer = buffer;
+        WIDTH = buffer.getWidth();
+        HEIGHT = buffer.getHeight();
+        backBuffer = new int[WIDTH * HEIGHT];
     }
 
     public void DrawRegion(Region r) {
+    }
 
+    public void DrawPixel(int x, int y, int c) {
+        backBuffer[x + y * WIDTH] = c;
+        
+    }
+
+    public void DrawFrame() {
+        buffer.setRGB(0, 0, WIDTH, HEIGHT, backBuffer, 0, WIDTH);
+        for (int i = 0; i < backBuffer.length; i++) {
+            backBuffer[i] = 0;
+        }
     }
 }

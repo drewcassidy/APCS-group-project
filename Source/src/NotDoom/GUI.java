@@ -162,6 +162,8 @@ public class GUI{
         
         else {
             renderer.DrawRegion(m.currentRegion());
+            renderer.DrawPixel(15, tick, 0xFF00FF);
+            renderer.DrawFrame();
 
             //healthPanel.add(health);
             healthPanel.add(image);
