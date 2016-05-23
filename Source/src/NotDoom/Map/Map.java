@@ -127,4 +127,7 @@ public class Map {
 
         System.out.println("done building map");
     }
+    public Region[] getRegion(){
+        return regions;
+    }
 }

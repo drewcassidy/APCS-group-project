@@ -52,6 +52,7 @@ public class GUI{
         image = new MainScreen("nb.png");
         image2 = new MainScreen("nb.png");
         blank = new MainScreen("blank.png");
+        blank.giveRegions(m.getRegion());
         
         ammo = new JLabel("0");
         health = new JLabel("100%");
@@ -114,6 +115,7 @@ public class GUI{
         public void keyPressed(KeyEvent e) {
             key = e.getKeyCode();
             if (key == KeyEvent.VK_U){
+                tab = true;
                 blank.tabed(true);
             }
             System.out.println("typed");
