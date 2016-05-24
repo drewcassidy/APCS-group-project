@@ -15,8 +15,7 @@
  */
 package NotDoom.Map;
 
-import NotDoom.IntVector;
-import NotDoom.Sprite;
+import NotDoom.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
@@ -31,17 +30,19 @@ public class Map {
     //array of regions, array of enemys
     private Region[] regions;
     private Sprite[] sprites;
+    private Player   player;
 
     private final int MAPSIZE = 500;
 
     public Map(String path) {
         BufferedImage[] textures = new BufferedImage[MAPSIZE];
         IntVector[] vertexes = new IntVector[MAPSIZE];
-        regions = new Region[MAPSIZE];
         ArrayList<IntVector>[] regionVertexes = new ArrayList[MAPSIZE];
         ArrayList<BufferedImage>[] regionTextures = new ArrayList[MAPSIZE];
         HashMap<Integer, Integer>[] regionNeighbors = new HashMap[MAPSIZE];
         RegionData[] regionData = new RegionData[MAPSIZE];
+
+        player = new Player(new Vector(2, 2));
 
         int tempFloor = -1;
         int tempCeiling = -1;
@@ -112,6 +113,7 @@ public class Map {
 
         System.out.println("done reading " + path);
 
+        regions = new Region[regionCount];
         for (int i = 0; i < regionCount; i++) {
             int size = regionVertexes[i].size();
             IntVector[] tempVertexes = regionVertexes[i].toArray(new IntVector[size]);
@@ -127,7 +129,15 @@ public class Map {
 
         System.out.println("done building map");
     }
+    
     public Region[] getRegion(){
         return regions;
+    }
+    
+    public Region currentRegion() {
+        for (int i = 0; i < regions.length; i++) {
+            if (regions[i].contains(player.getPos())) return regions[i];
+        }
+        return null;
     }
 }
