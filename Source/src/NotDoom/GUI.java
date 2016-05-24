@@ -39,8 +39,6 @@ public class GUI{
     private DoomRenderer renderer;
     private BufferedImage buffer;
 
-    private BufferedImage testImage;
-    
     
     public GUI(Map m) throws IOException{
         this.m = m;
@@ -103,7 +101,7 @@ public class GUI{
         frame.setVisible(true);
         frame.setResizable(false);
         
-        testImage = ImageIO.read(new File("nb.png"));
+        //testImage = ImageIO.read(new File("nb.png"));
         
         run();
         
@@ -169,7 +167,7 @@ public class GUI{
         else {
             renderer.DrawRegion(m.currentRegion());
             renderer.DrawPixel(15, tick, 0xFF00FF);
-            renderer.DrawColumn(10, 40, 200, 512, 32, testImage);
+            //renderer.DrawColumn(10, 40, 200, 512, 32, testImage);
             renderer.DrawFrame();
 
             //healthPanel.add(health);
