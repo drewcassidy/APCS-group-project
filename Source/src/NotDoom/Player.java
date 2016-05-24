@@ -1,10 +1,4 @@
-
 package NotDoom;
-
-
-
-
-
 public class Player {
     
     private int ammo, health;  
@@ -12,17 +6,12 @@ public class Player {
     private float rot;
     
     
-    public Player(){
+    public Player(Vector pos){
         health = 100;
         ammo = 50;
-        pos = new Vector(0, 0);
+        this.pos = pos;
         rot = 0;
-        
-        
-        
     }
-    
-    
     
     public void removeAmmo(int amount){
         ammo -= amount;

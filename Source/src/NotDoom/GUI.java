@@ -7,11 +7,14 @@ import NotDoom.Renderer.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 import javax.swing.*;
 
 public class GUI{
-    
+    private final int FPS = 30;
     private JFrame frame;
     
     private JPanel mainPanel, screen, hotBar, ammoPanel, healthPanel;
@@ -20,7 +23,7 @@ public class GUI{
     
     private JLabel ammo, health, armor;
 
-    private MainScreen image, image2, main, blank;
+    private MainScreen image, image2, mainScreen, mapScreen;
     
     private int WIDTH = 800, HEIGHT = 600;
 
@@ -35,9 +38,11 @@ public class GUI{
 
     private DoomRenderer renderer;
     private BufferedImage buffer;
+
+    private BufferedImage testImage;
     
     
-    public GUI(Map m){
+    public GUI(Map m) throws IOException{
         this.m = m;
         c = new GridBagConstraints();
         
@@ -46,13 +51,13 @@ public class GUI{
         frame.setTitle("DOOM");
         
         buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        main = new MainScreen(buffer);
+        mainScreen = new MainScreen(buffer);
         renderer = new DoomRenderer(buffer);
 
         image = new MainScreen("nb.png");
         image2 = new MainScreen("nb.png");
-        blank = new MainScreen("blank.png");
-        blank.giveRegions(m.getRegion());
+        
+        mapScreen = new MainScreen("blank.png");
         
         ammo = new JLabel("0");
         health = new JLabel("100%");
@@ -75,7 +80,7 @@ public class GUI{
         //hotBar.add(ammoPanel);
         
         screen = new JPanel();
-        screen.add(main);
+        screen.add(mainScreen);
         
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
@@ -99,6 +104,7 @@ public class GUI{
         frame.setVisible(true);
         frame.setResizable(false);
         
+        testImage = ImageIO.read(new File("nb.png"));
         
         run();
         
@@ -116,7 +122,9 @@ public class GUI{
             key = e.getKeyCode();
             if (key == KeyEvent.VK_U){
                 tab = true;
-                blank.tabed(true);
+                mainScreen.tabed(true);
+
+                mainScreen.tabed(true);
             }
             System.out.println("typed");
         }
@@ -125,7 +133,7 @@ public class GUI{
         public void keyReleased(KeyEvent e) {
             key = -1;
             tab = false;
-            blank.tabed(false);
+            mainScreen.tabed(false);
         
         }
             
@@ -141,11 +149,6 @@ public class GUI{
             tick = 0;
             System.out.println("Word");
             //label.setText(key+"");
-            
-            
-            
-            
-            
         }
         
     }
@@ -155,8 +158,6 @@ public class GUI{
         
         Rectangle box = new Rectangle ( 50, 20, 100, 75);
         g2.draw(box);
-        
-        
     }
     
     
@@ -166,74 +167,68 @@ public class GUI{
         mainPanel.removeAll();
         
         if (tab == true){
-            mainPanel.add(blank);
+            mainPanel.add(mapScreen);
         }
         
         else {
-        
-        
-        
+            renderer.DrawRegion(m.currentRegion());
+            renderer.DrawPixel(15, tick, 0xFF00FF);
+            renderer.DrawColumn(10, 40, 200, 512, 32, testImage);
+            renderer.DrawFrame();
 
-        //healthPanel.add(health);
-        healthPanel.add(image);
-        
-        //ammoPanel.add(ammo);
-        ammoPanel.add(image2);
-;
-        //hotBar.setLayout(new GridLayout(1,2));
-        //hotBar.add(healthPanel);
-        //hotBar.add(ammoPanel);
-        
-        
-        screen.add(main);
+            //healthPanel.add(health);
+            healthPanel.add(image);
+            
+            //ammoPanel.add(ammo);
+            ammoPanel.add(image2);
 
-        mainPanel.setLayout(new GridBagLayout());
-        c = new GridBagConstraints();        
-        c.fill = GridBagConstraints.NONE;
-        
-        c.gridx = 0;
-        c.gridy = 0;
-        
-        c.gridwidth = 2;
-        //c.gridheight = 2;
-        c.ipady = HEIGHT-100;
-        c.ipadx = WIDTH;
-        
-        mainPanel.add(screen, c);
-        
-        //c.fill = GridBagConstraints.VERTICAL;
-        c.gridx = 0;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        c.ipady = 300;
-        c.ipadx = WIDTH/2;
-        c.anchor = GridBagConstraints.FIRST_LINE_START;
-        
-        mainPanel.add(healthPanel,c);
-        
-        //c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 1;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        c.anchor = GridBagConstraints.FIRST_LINE_START;
-        
-        mainPanel.add(ammoPanel,c);
-        
+            //hotBar.setLayout(new GridLayout(1,2));
+            //hotBar.add(healthPanel);
+            //hotBar.add(ammoPanel);
+            
+            screen.add(mainScreen);
+
+            mainPanel.setLayout(new GridBagLayout());
+            c = new GridBagConstraints();        
+            c.fill = GridBagConstraints.NONE;
+            
+            c.gridx = 0;
+            c.gridy = 0;
+            
+            c.gridwidth = 2;
+            //c.gridheight = 2;
+            c.ipady = HEIGHT-100;
+            c.ipadx = WIDTH;
+            
+            mainPanel.add(screen, c);
+            
+            //c.fill = GridBagConstraints.VERTICAL;
+            c.gridx = 0;
+            c.gridy = 1;
+            c.gridwidth = 1;
+            c.ipady = 300;
+            c.ipadx = WIDTH/2;
+            c.anchor = GridBagConstraints.FIRST_LINE_START;
+            
+            mainPanel.add(healthPanel,c);
+            
+            //c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 1;
+            c.gridy = 1;
+            c.gridwidth = 1;
+            c.anchor = GridBagConstraints.FIRST_LINE_START;
+            
+            mainPanel.add(ammoPanel,c);
         }
-      
-        
-
          
         mainPanel.invalidate();
         mainPanel.validate();
         mainPanel.repaint();
-        
     }
     
     
      public void run(){
-        int fps = 60;
-        double timePerTick = 1000000000 / fps;
+        double timePerTick = 1000000000 / FPS;
         double delta = 0;
         long now;
         long lastTime = System.nanoTime();
@@ -282,13 +277,5 @@ public class GUI{
             tickTimer=60;
             run();
         }
-        
-            
     }
-     
-     
-    
-    
-    
-    
 }
