@@ -39,10 +39,8 @@ public class GUI{
     private DoomRenderer renderer;
     private BufferedImage buffer;
 
-    private BufferedImage testImage;
-    
-    
-    public GUI(Map m) throws IOException{
+
+    public GUI(Map m){
         this.m = m;
         c = new GridBagConstraints();
         
@@ -56,7 +54,7 @@ public class GUI{
 
         image = new MainScreen("nb.png");
         image2 = new MainScreen("nb.png");
-        
+
         mapScreen = new MainScreen("blank.png");
         
         ammo = new JLabel("0");
@@ -104,7 +102,7 @@ public class GUI{
         frame.setVisible(true);
         frame.setResizable(false);
         
-        testImage = ImageIO.read(new File("nb.png"));
+
         
         run();
         
@@ -121,10 +119,14 @@ public class GUI{
         public void keyPressed(KeyEvent e) {
             key = e.getKeyCode();
             if (key == KeyEvent.VK_U){
+
                 tab = true;
                 mainScreen.tabed(true);
 
                 mainScreen.tabed(true);
+
+
+
             }
             System.out.println("typed");
         }
@@ -133,8 +135,9 @@ public class GUI{
         public void keyReleased(KeyEvent e) {
             key = -1;
             tab = false;
+
             mainScreen.tabed(false);
-        
+
         }
             
     }
@@ -173,7 +176,7 @@ public class GUI{
         else {
             renderer.DrawRegion(m.currentRegion());
             renderer.DrawPixel(15, tick, 0xFF00FF);
-            renderer.DrawColumn(10, 40, 200, 512, 32, testImage);
+
             renderer.DrawFrame();
 
             //healthPanel.add(health);
@@ -279,3 +282,4 @@ public class GUI{
         }
     }
 }
+
