@@ -43,7 +43,7 @@ public class Region {
     public Region(IntVector[] vertexes, BufferedImage[] textures, RegionData regionData) {
         walls = new Wall[vertexes.length];
         this.vertexes = vertexes;
-        for (int i = 0; i < vertexes.length - 1; i++) {
+        for (int i = 0; i < vertexes.length; i++) {
             int j = (i + 1) % vertexes.length;
             walls[i] = new Wall(vertexes[i], vertexes[j], textures[i]);
         }
