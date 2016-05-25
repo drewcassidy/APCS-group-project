@@ -47,6 +47,7 @@ public class Map {
         int tempFloor = -1;
         int tempCeiling = -1;
         int regionCount = 0;
+        int region = 0;
 
         try {
             FileReader fr = new FileReader(path);
@@ -58,7 +59,6 @@ public class Map {
                     String[] split = line.split("\\s+");
                     char key = split[0].charAt(0);
                     int index = Integer.parseInt(split[0].substring(1));
-                    int region = 0;
 
                     switch (key) {
                         case 't':
@@ -116,6 +116,7 @@ public class Map {
         regions = new Region[regionCount];
         for (int i = 0; i < regionCount; i++) {
             int size = regionVertexes[i].size();
+            System.out.println(size);
             IntVector[] tempVertexes = regionVertexes[i].toArray(new IntVector[size]);
             BufferedImage[] tempTextures = regionTextures[i].toArray(new BufferedImage[size]);
             regions[i] = new Region(tempVertexes, tempTextures, regionData[i]);
