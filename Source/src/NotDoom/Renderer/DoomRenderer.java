@@ -60,8 +60,21 @@ public class DoomRenderer {
     }
 
     public void DrawLine(int x1, int x2, int y1, int y2, int color){
+        if (x1 > x2) {
+            int temp = x1;
+            x1 = x2;
+            x2 = temp;
+        }
+
+        if (y1 > y2) {
+            int temp = y1;
+            y1 = y2;
+            y2 = temp;
+        }
+
         int dx = x2 - x1;
         int dy = y2 - y1;
+        
         if (dx != 0) {
             float error = -1;
             float dError = Math.abs(dy - dx);
