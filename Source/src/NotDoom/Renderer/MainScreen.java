@@ -83,7 +83,7 @@ public class MainScreen extends JComponent
     {
         //System.out.println("I HAVE STUFF");
         
-        if(tab == true){
+        if(true == true){
             //System.out.println("SUPER STUFFY STUFF");
             
             Graphics2D g2 = (Graphics2D) g;
@@ -97,10 +97,7 @@ public class MainScreen extends JComponent
                 v2 = walls.get(j).v2();
                 Line2D.Double slash = new Line2D.Double(v1.x(),v1.y(),v2.x(),v2.y());
                 g2.draw(slash);
-                    
             }
-                
-            
         }
         else{
             //System.out.println("WE GATS THE STUFF");

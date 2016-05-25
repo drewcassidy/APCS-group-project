@@ -56,7 +56,10 @@ public class DoomRenderer {
         int x1 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v1.x() / v1.y()));
         int x2 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v2.x() / v2.y()));
         int y1 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (p.getHeight() - floor) / v1.y());
-
+        int y2 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (p.getHeight() - floor) / v2.y());
+        int h1 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (ceiling - floor) / v1.y());
+        int h2 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (ceiling - floor) / v2.y());
+        
     }
 
     public void DrawLine(int x1, int x2, int y1, int y2, int color){
