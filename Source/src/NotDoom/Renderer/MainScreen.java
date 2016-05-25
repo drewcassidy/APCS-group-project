@@ -22,7 +22,7 @@ public class MainScreen extends JComponent
     //We will use a BufferedImage object to get the image from a file.
     private BufferedImage image;
     private boolean tab; 
-    private ArrayList<Wall> walls;
+
     // Constructor
     // You may choose to have a parameter, such as a String filename,
     // so this class can handle different files without changing the code.
@@ -38,17 +38,7 @@ public class MainScreen extends JComponent
             // Null is returned, If no registered ImageReader claims to
             // be able to read the resulting stream.
         image = im;
-        System.out.println(r.length+" Region");
-        walls = new ArrayList<>();
         
-        for (int i = 0; i < r.length; i++){
-                System.out.println("IM COCO FOR COCOPUFFS");
-                
-                for (int j = 0; j < r[i].getWalls().length;j++){
-                    System.out.println(r[i].getWalls().length+" Walls");
-                    walls.add(r[i].getWalls()[j]);                
-                }
-        }
         
     }
     
@@ -84,24 +74,7 @@ public class MainScreen extends JComponent
         //System.out.println("I HAVE STUFF");
         
         if(tab == true){
-            //System.out.println("SUPER STUFFY STUFF");
-            
-            Graphics2D g2 = (Graphics2D) g;
-            
-            g2.setColor(Color.RED);
-            System.out.println(walls.size());
-            for (int j = 0; j < walls.size(); j++){
-                //System.out.println("HEllo");
-                IntVector v1, v2;
-                v1 = walls.get(j).v1();
-                v2 = walls.get(j).v2();
-                
-                Line2D.Double slash = new Line2D.Double(v1.x(),v1.y(),v2.x(),v2.y());
-                g2.draw(slash);
-                    
-            }
-                
-            
+           
         }
         else{
             //System.out.println("WE GATS THE STUFF");
