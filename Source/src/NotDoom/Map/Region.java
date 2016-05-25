@@ -73,7 +73,7 @@ public class Region {
     public ArrayList<Wall> getSolidWalls() {
         ArrayList<Wall> solidWalls = new ArrayList<>();
         for (int i = 0; i < walls.length; i++) {
-            if (neighbors[i] != null) {
+            if (neighbors[i] == null) {
                 solidWalls.add(walls[i]);
             }
         }
