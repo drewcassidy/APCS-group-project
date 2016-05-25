@@ -171,16 +171,17 @@ public class GUI{
         
         mainPanel.removeAll();
         
-        if (tab == true){
-            mainPanel.add(mainScreen);
+        if(tab == true){
+            renderer.DrawMap(m);
+            
         }
-        
         else {
+       
             renderer.DrawRegion(m.currentRegion());
             renderer.DrawPixel(15, tick, 0xFF00FF);
             renderer.DrawLine(200, tick, 300, 0, 0x00FF00);
             renderer.DrawFrame();
-
+        }
             //healthPanel.add(health);
             healthPanel.add(image);
             
@@ -191,6 +192,7 @@ public class GUI{
             //hotBar.add(healthPanel);
             //hotBar.add(ammoPanel);
             
+                
             screen.add(mainScreen);
 
             mainPanel.setLayout(new GridBagLayout());
@@ -224,7 +226,7 @@ public class GUI{
             c.anchor = GridBagConstraints.FIRST_LINE_START;
             
             mainPanel.add(ammoPanel,c);
-        }
+        
          
         mainPanel.invalidate();
         mainPanel.validate();
