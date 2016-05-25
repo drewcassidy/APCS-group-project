@@ -40,7 +40,7 @@ public class DoomRenderer {
     }
 
     public void DrawPixel(int x, int y, int c) {
-        System.out.println("drawing pixel " + c);
+        //System.out.println("drawing pixel " + c);
         backBuffer[x + y * WIDTH] = c;
     }
 
