@@ -95,6 +95,7 @@ public class MainScreen extends JComponent
                 IntVector v1, v2;
                 v1 = walls.get(j).v1();
                 v2 = walls.get(j).v2();
+                
                 Line2D.Double slash = new Line2D.Double(v1.x(),v1.y(),v2.x(),v2.y());
                 g2.draw(slash);
                     
