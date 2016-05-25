@@ -26,7 +26,7 @@ public class Vector {
 
     // CONSTRUCTOR
 
-    public Vector(int x, int y) {
+    public Vector(float x, float y) {
         this.x = x;
         this.y = y;
     }
@@ -39,5 +39,9 @@ public class Vector {
 
     public float y() {
         return y;
+    }
+
+    public float magnitude() {
+        return (float) Math.sqrt(x * x + y * y);
     }
 }

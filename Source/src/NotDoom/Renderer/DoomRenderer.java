@@ -15,7 +15,8 @@
  */
 package NotDoom.Renderer;
 import NotDoom.Map.*;
-import java.awt.Color;
+import NotDoom.Player;
+import NotDoom.Vector;
 import java.awt.image.BufferedImage;
 
 /**
@@ -40,13 +41,43 @@ public class DoomRenderer {
     }
 
     public void DrawPixel(int x, int y, int c) {
-        System.out.println("drawing pixel " + c);
         backBuffer[x + y * WIDTH] = c;
     }
 
     public void DrawColumn(int x, int y1, int y2, int height, int offset, BufferedImage texture) {
         for (int y = y1; y <= y2; y++) {
             DrawPixel(x, y, texture.getRGB(offset % texture.getWidth(), (int) ((float) (y - y1) / (y2 - y1) * height % texture.getHeight())));
+        }
+    }
+
+    public void DrawWall(Wall w, Player p, int minx, int maxx, int miny, int maxy, int floor, int ceiling) {
+        Vector v1 = p.worldToLocal(w.v1());
+        Vector v2 = p.worldToLocal(w.v2());
+        int x1 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v1.x() / v1.y()));
+        int x2 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v2.x() / v2.y()));
+        int y1 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (p.getHeight() - floor) / v1.y());
+
+    }
+
+    public void DrawLine(int x1, int x2, int y1, int y2, int color){
+        int dx = x2 - x1;
+        int dy = y2 - y1;
+        if (dx != 0) {
+            float error = -1;
+            float dError = Math.abs(dy - dx);
+            int y = y1;
+            for (int x = x1; x <= x2; x++) {
+                DrawPixel(x, y, color);
+                error += dError;
+                if (error >  0 ) {
+                    y += 1;
+                    error -= 1;
+                }
+            }
+        } else {
+            for (int y = y1; y <= y2; y++) {
+                DrawPixel(x1, y, color);
+            }
         }
     }
 

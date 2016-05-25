@@ -4,6 +4,7 @@ public class Player {
     private int ammo, health;  
     private Vector pos;
     private float rot;
+    private float height;
     
     
     public Player(Vector pos){
@@ -78,10 +79,14 @@ public class Player {
     public void lookRight(){
         lookRight(1);
     }
-    
-    
-    
-    
-    
-    
+
+    public float getHeight() {
+        return height;
+    }
+
+    public Vector worldToLocal(IntVector v) {
+        Vector v1 = new Vector(pos.x() - v.x(), pos.y() - v.y());
+        double angle = Math.atan2(v1.y(), v1.x());
+        return new Vector(v1.magnitude() * (float) Math.cos(angle), v1.magnitude() * (float) Math.sin(angle));
+    }
 }
