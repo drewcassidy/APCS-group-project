@@ -17,13 +17,16 @@ public class GUI{
     private final int FPS = 30;
     private JFrame frame;
     
+    private Player p;
+    
     private JPanel mainPanel, screen, hotBar, ammoPanel, healthPanel;
     
     private Map m;
     
     private JLabel ammo, health, armor;
 
-    private MainScreen image, image2, mainScreen, mapScreen;
+    private InfoScreen image, image2;
+    private MainScreen mainScreen;
     
     private int WIDTH = 800, HEIGHT = 600;
 
@@ -31,6 +34,8 @@ public class GUI{
     private int tick, tickTimer;
     
     private int key;
+    
+    //private boolean 
     
     private KeyListener keys;
     
@@ -49,13 +54,13 @@ public class GUI{
         frame.setTitle("DOOM");
         
         buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        mainScreen = new MainScreen(buffer);
+        
+        mainScreen = new MainScreen(buffer, m.getRegion());
+       
         renderer = new DoomRenderer(buffer);
 
-        image = new MainScreen("nb.png");
-        image2 = new MainScreen("nb.png");
-
-        mapScreen = new MainScreen("blank.png");
+        image = new InfoScreen("nb.png");
+        image2 = new InfoScreen("nb.png");
         
         ammo = new JLabel("0");
         health = new JLabel("100%");
@@ -86,8 +91,6 @@ public class GUI{
         c.gridy = 0;
         mainPanel.add(screen, c);
         
-        //mainPanel.add(hotBar, c);
-        
         
         //panel.add(image);
         mainPanel.addKeyListener(keys);
@@ -101,6 +104,8 @@ public class GUI{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setResizable(false);
+        
+        p = new Player(new Vector(0,0));
         
 
         
@@ -123,10 +128,6 @@ public class GUI{
                 tab = true;
                 mainScreen.tabed(true);
 
-                mainScreen.tabed(true);
-
-
-
             }
             System.out.println("typed");
         }
@@ -147,11 +148,12 @@ public class GUI{
         tick++;
         if (tick > tickTimer){
             
-            //ammo.setLocation(20, 500);
+           
+            //player.update();
+            //loop through sprite update
             
             tick = 0;
             System.out.println("Word");
-            //label.setText(key+"");
         }
         
     }
@@ -170,7 +172,7 @@ public class GUI{
         mainPanel.removeAll();
         
         if (tab == true){
-            mainPanel.add(mapScreen);
+            mainPanel.add(mainScreen);
         }
         
         else {
