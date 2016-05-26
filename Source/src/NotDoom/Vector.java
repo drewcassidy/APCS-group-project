@@ -30,6 +30,13 @@ public class Vector {
         this.x = x;
         this.y = y;
     }
+    
+    public void moveX(float am){
+        
+    }
+    public void moveY(float am){
+        
+    }
 
     // METHODS
 

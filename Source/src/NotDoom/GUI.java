@@ -124,6 +124,7 @@ public class GUI{
         public void keyPressed(KeyEvent e) {
             key = e.getKeyCode();
             if (key == KeyEvent.VK_U){
+
                 tab = true;
                 mainScreen.tabed(true);
             }

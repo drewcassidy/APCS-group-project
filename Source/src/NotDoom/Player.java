@@ -5,6 +5,7 @@ public class Player {
     private Vector pos;
     private float rot;
     private float height;
+    private final int moveSpeed=60;
     
     
     public Player(Vector pos){
@@ -12,6 +13,11 @@ public class Player {
         ammo = 50;
         this.pos = pos;
         rot = 0;
+    }
+    
+    public void moveForward(){
+        pos.moveX((float)(Math.sin(rot)/moveSpeed));
+        pos.moveY((float)(Math.cos(rot)/moveSpeed));
     }
     
     public void removeAmmo(int amount){
