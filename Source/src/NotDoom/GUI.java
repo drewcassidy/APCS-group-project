@@ -202,7 +202,6 @@ public class GUI{
             renderer.DrawFrame();
         }
         else {
-       
             renderer.DrawRegion(m.currentRegion());
             renderer.DrawPixel(15, tick, 0xFF00FF);
             renderer.DrawLine(200, tick, 300, 0, 0x00FF00);
@@ -253,7 +252,6 @@ public class GUI{
             c.anchor = GridBagConstraints.FIRST_LINE_START;
             
             mainPanel.add(ammoPanel,c);
-        
          
         mainPanel.invalidate();
         mainPanel.validate();
