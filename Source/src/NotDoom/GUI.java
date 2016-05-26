@@ -116,7 +116,7 @@ public class GUI{
 
         
     private class Key implements KeyListener{
-
+        //wasd left right space shoot 
         @Override
         public void keyTyped(KeyEvent e) {}
 
@@ -124,12 +124,37 @@ public class GUI{
         public void keyPressed(KeyEvent e) {
             key = e.getKeyCode();
             if (key == KeyEvent.VK_U){
-
                 tab = true;
                 mainScreen.tabed(true);
-
             }
-            System.out.println("typed");
+            if (key == KeyEvent.VK_W){
+                
+                
+            }
+            if (key == KeyEvent.VK_A){
+                
+                
+            }
+            if (key == KeyEvent.VK_S){
+                
+                
+            }
+            if (key == KeyEvent.VK_D){
+                
+                
+            }
+            if (key == KeyEvent.VK_SPACE){
+                
+                
+            }
+            if (key == KeyEvent.VK_RIGHT){
+                p.lookRight();
+                
+            }
+            if (key == KeyEvent.VK_LEFT){
+                p.lookLeft();
+                
+            }
         }
 
         @Override
@@ -173,7 +198,7 @@ public class GUI{
         
         if(tab == true){
             renderer.DrawMap(m);
-            
+            renderer.DrawFrame();
         }
         else {
        
@@ -194,6 +219,7 @@ public class GUI{
             
                 
             screen.add(mainScreen);
+            
 
             mainPanel.setLayout(new GridBagLayout());
             c = new GridBagConstraints();        
