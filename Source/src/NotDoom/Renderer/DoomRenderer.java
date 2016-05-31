@@ -33,6 +33,7 @@ public class DoomRenderer {
     private final int WIDTH;
     private final int HEIGHT;
     private ArrayList<Wall> walls;
+    private final int MAPSCALE = 10;
 
     public DoomRenderer(BufferedImage buffer) {
         this.buffer = buffer;
@@ -70,61 +71,84 @@ public class DoomRenderer {
     }
     
     public void DrawMap(Map m){
-        Region [] r = m.getRegion();
+        Region [] r = m.getRegions();
               
         for (int i = 0; i < r.length; i++){
-                System.out.println("IM COCO FOR COCOPUFFS");
-                
-                for (int j = 0; j < r[i].getWalls().length;j++){
-                    System.out.println(r[i].getWalls().length+" Walls");
-                    walls.add(r[i].getWalls()[j]);                
-                }
+            walls.addAll(r[i].getSolidWalls());
         }
         
         for (int j = 0; j < walls.size(); j++){
-                //System.out.println("HEllo");
-                IntVector v1, v2;
-                v1 = walls.get(j).v1();
-                v2 = walls.get(j).v2();
-                
-                DrawLine(v1.x(),v1.y(),v2.x(),v2.y(), 0xFFFFFF);
-                
-                    
-            }
-        
+            IntVector v1, v2;
+            v1 = walls.get(j).v1();
+            v2 = walls.get(j).v2();
+            
+            DrawLine(10 + v1.x() * MAPSCALE, 10 + v2.x() * MAPSCALE, 10 + v1.y() * MAPSCALE, 10 + v2.y() * MAPSCALE, 0xFFFFFF);
+        }
+
+        Player p = m.getPlayer();
+        drawBox(MAPSCALE * (int) p.getPos().x() - 3, MAPSCALE * (int) p.getPos().y() - 3, 6, 6, 0xFF0000);
     }
 
     public void DrawLine(int x1, int x2, int y1, int y2, int color){
-        if (x1 > x2) {
-            int temp = x1;
-            x1 = x2;
-            x2 = temp;
-        }
-
-        if (y1 > y2) {
-            int temp = y1;
-            y1 = y2;
-            y2 = temp;
-        }
-
         int dx = x2 - x1;
         int dy = y2 - y1;
         
         if (dx != 0) {
-            float error = -1;
-            float dError = Math.abs(dy - dx);
-            int y = y1;
-            for (int x = x1; x <= x2; x++) {
-                DrawPixel(x, y, color);
-                error += dError;
-                if (error >  0 ) {
-                    y += 1;
-                    error -= 1;
+            float error = -1.0f;
+            float dError = Math.abs((float) dy / (float) dx);
+            if (dError < 1) {
+                if (x1 > x2) {
+                    int temp = x1;
+                    x1 = x2;
+                    x2 = temp;
+                    temp = y1;
+                    y1 = y2;
+                    y2 = temp;
+                }
+                int y = y1;
+                for (int x = x1; x < x2; x++) {
+                    DrawPixel(x, y, color);
+                    error += dError;
+                    while (error >=  0 ) {
+                        y += Math.signum(y2 - y1);
+                        error -= 1;
+                    }
+                }
+            } else {
+                if (y1 > y2) {
+                    int temp = x1;
+                    x1 = x2;
+                    x2 = temp;
+                    temp = y1;
+                    y1 = y2;
+                    y2 = temp; 
+                }
+                int x = x1;
+                for (int y = y1; y < y2; y++) {
+                    DrawPixel(x, y, color);
+                    error += (1 / dError);
+                    while (error >= 0) {
+                        x += Math.signum(x2 - x1);
+                        error -= 1;
+                    }
                 }
             }
         } else {
+            if (y1 > y2) {
+                int temp = y1;
+                y1 = y2;
+                y2 = temp; 
+            }
             for (int y = y1; y <= y2; y++) {
                 DrawPixel(x1, y, color);
+            }
+        }
+    }
+
+    public void drawBox(int x, int y, int l, int h, int color) {
+        for (int dx = 0; dx <= l; dx++) {
+            for (int dy = 0; dy <= h; dy++) {
+                DrawPixel(x + dx, y + dy, color);
             }
         }
     }

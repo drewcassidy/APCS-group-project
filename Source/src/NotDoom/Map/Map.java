@@ -131,7 +131,7 @@ public class Map {
         System.out.println("done building map");
     }
     
-    public Region[] getRegion(){
+    public Region[] getRegions(){
         return regions;
     }
     
@@ -140,5 +140,9 @@ public class Map {
             if (regions[i].contains(player.getPos())) return regions[i];
         }
         return null;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }
