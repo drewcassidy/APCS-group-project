@@ -55,7 +55,7 @@ public class GUI{
         
         buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         
-        mainScreen = new MainScreen(buffer, m.getRegion());
+        mainScreen = new MainScreen(buffer, m.getRegions());
        
         renderer = new DoomRenderer(buffer);
 
@@ -204,7 +204,7 @@ public class GUI{
         else {
             renderer.DrawRegion(m.currentRegion());
             renderer.DrawPixel(15, tick, 0xFF00FF);
-            renderer.DrawLine(200, tick, 300, 0, 0x00FF00);
+            renderer.DrawLine( tick, 200, 300, 0, 0x00FF00);
             renderer.DrawFrame();
         }
             //healthPanel.add(health);
