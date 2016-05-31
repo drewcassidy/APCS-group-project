@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import javax.swing.*;
@@ -18,6 +19,8 @@ public class GUI{
     private JFrame frame;
     
     private Player p;
+    
+    private ArrayList<Enemy> e;
     
     private JPanel mainPanel, screen, hotBar, ammoPanel, healthPanel;
     
@@ -105,13 +108,21 @@ public class GUI{
         frame.setVisible(true);
         frame.setResizable(false);
         
+        //create player
         p = new Player(new Vector(0,0));
         
+        //create enemys
+        e = new ArrayList<>();
+        e.add(new Enemy (0, 0));
+        e.add(new Enemy (10, 10));
+        e.add(new Enemy (20, 20));
+        e.add(new Enemy (30, 30));
 
         
         run();
         
     }
+    
     
 
         
@@ -129,31 +140,42 @@ public class GUI{
                 mainScreen.tabed(true);
             }
             if (key == KeyEvent.VK_W){
-                
+                p.moveForward(0);
                 
             }
             if (key == KeyEvent.VK_A){
-                
+                p.moveForward(270);
                 
             }
             if (key == KeyEvent.VK_S){
-                
+                p.moveForward(180);
                 
             }
             if (key == KeyEvent.VK_D){
-                
-                
-            }
-            if (key == KeyEvent.VK_SPACE){
-                
+                p.moveForward(90);
                 
             }
+            
             if (key == KeyEvent.VK_RIGHT){
                 p.lookRight();
                 
             }
             if (key == KeyEvent.VK_LEFT){
                 p.lookLeft();
+                
+            }
+            if (key == KeyEvent.VK_SPACE){
+                if (p.canShoot() == true){
+                    ArrayList<Enemy> es = getEnemys();
+                    
+                    for (int i = 0; i < es.size(); i++){
+                        if (p.inSights(es.get(i))){
+                            
+                        }
+                    }
+                    
+                    
+                }
                 
             }
         }
@@ -169,13 +191,19 @@ public class GUI{
             
     }
     
+    public ArrayList<Enemy> getEnemys(){
+        return e;
+    }
+    
+    
     public void tick(){
         
         tick++;
         if (tick > tickTimer){
             
            
-            //player.update();
+            p.update();
+            
             //loop through sprite update
             
             tick = 0;
@@ -184,13 +212,14 @@ public class GUI{
         
     }
     
+    /*
     public void paint(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
         
         Rectangle box = new Rectangle ( 50, 20, 100, 75);
         g2.draw(box);
     }
-    
+    */
     
     public void render(){
         
