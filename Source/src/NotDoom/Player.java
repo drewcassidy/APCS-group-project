@@ -1,7 +1,7 @@
 package NotDoom;
 public class Player {
     
-    private int ammo, health;  
+    private int ammo, health,ammoTimer;  
     private Vector pos;
     private float rot;
     private float height;
@@ -13,11 +13,42 @@ public class Player {
         ammo = 50;
         this.pos = pos;
         rot = 0;
+        ammoTimer = 30;
     }
     
-    public void moveForward(){
-        pos.moveX((float)(Math.sin(rot)/moveSpeed));
-        pos.moveY((float)(Math.cos(rot)/moveSpeed));
+    public void update(){
+        decAmmoTime();
+    }
+    
+    public boolean inSights(Enemy e){
+        float ex = e.getX();
+        float ey = e.getY();
+        float dx = ex - pos.x();
+        float dy = ey - pos.y();
+        
+        int theta = (int)()
+        
+        
+        
+    }
+    
+    
+    public void decAmmoTime(){
+        if (ammoTimer>0)
+            ammoTimer--;
+    }
+    
+    public boolean canShoot(){
+        if (ammoTimer == 0 && ammo > 0){
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public void moveForward(int deg){
+        pos.moveX((float)(Math.sin(rot+deg)/moveSpeed));
+        pos.moveY((float)(Math.cos(rot+deg)/moveSpeed));
     }
     
     public void removeAmmo(int amount){

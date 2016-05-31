@@ -24,10 +24,16 @@ public class Enemy extends Sprite{
     private Vector pos;
     
     
-    public Enemy(){
+    public Enemy(float x, float y){
         health = 100;
         
-        pos= new Vector(0,0);
+        pos= new Vector(x,y);
+    }
+    
+    public void shoot(){
+        
+        takeDamage();
+        
     }
     
     

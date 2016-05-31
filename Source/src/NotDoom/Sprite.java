@@ -24,6 +24,7 @@ public class Sprite {
     //position and a texture
     private Vector pos;
     private BufferedImage t;
+    private int width;
     
     
 }
