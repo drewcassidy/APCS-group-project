@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 import javax.swing.*;
@@ -46,10 +47,15 @@ public class GUI{
 
     private DoomRenderer renderer;
     private BufferedImage buffer;
+    
+    
 
 
     public GUI(Map m){
         this.m = m;
+        
+        
+        
         c = new GridBagConstraints();
         
         frame = new JFrame();
@@ -109,7 +115,7 @@ public class GUI{
         frame.setResizable(false);
         
         //create player
-        p = new Player(new Vector(0,0));
+        p = new Player(new Vector(0,0));//, m);
         
         //create enemys
         e = new ArrayList<>();
@@ -135,57 +141,24 @@ public class GUI{
         public void keyPressed(KeyEvent e) {
             key = e.getKeyCode();
             if (key == KeyEvent.VK_U){
-
                 tab = true;
                 mainScreen.tabed(true);
             }
-            if (key == KeyEvent.VK_W){
-                p.moveForward(0);
-                
-            }
-            if (key == KeyEvent.VK_A){
-                p.moveForward(270);
-                
-            }
-            if (key == KeyEvent.VK_S){
-                p.moveForward(180);
-                
-            }
-            if (key == KeyEvent.VK_D){
-                p.moveForward(90);
-                
-            }
             
-            if (key == KeyEvent.VK_RIGHT){
-                p.lookRight();
-                
-            }
-            if (key == KeyEvent.VK_LEFT){
-                p.lookLeft();
-                
-            }
-            if (key == KeyEvent.VK_SPACE){
-                if (p.canShoot() == true){
-                    ArrayList<Enemy> es = getEnemys();
-                    
-                    for (int i = 0; i < es.size(); i++){
-                        if (p.inSights(es.get(i))){
-                            
-                        }
-                    }
-                    
-                    
-                }
-                
-            }
+            p.giveKey(key, true);
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            key = -1;
-            tab = false;
+            
+            key = e.getKeyCode();
+            if (key == KeyEvent.VK_U){
 
-            mainScreen.tabed(false);
+                tab = false;
+                mainScreen.tabed(false);
+            }
+            
+            p.giveKey(key, false);
 
         }
             
@@ -194,7 +167,8 @@ public class GUI{
     public ArrayList<Enemy> getEnemys(){
         return e;
     }
-    
+  
+
     
     public void tick(){
         
