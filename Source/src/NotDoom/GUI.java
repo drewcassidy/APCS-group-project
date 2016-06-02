@@ -110,11 +110,7 @@ public class GUI{
         frame.setResizable(false);
         
         //create player
-
-        p = new Player(new Vector(0,0));
-
         p = m.getPlayer();
-
         
         //create enemys
         e = new ArrayList<>();
@@ -144,44 +140,8 @@ public class GUI{
                 mainScreen.tabed(true);
             }
             
-            if (key == KeyEvent.VK_W){
-                p.moveForward(0);
-                
-            }
-            if (key == KeyEvent.VK_A){
-                p.moveForward((float) (3 * (Math.PI / 2)));
-                
-            }
-            if (key == KeyEvent.VK_S){
-                p.moveForward((float) Math.PI);
-                
-            }
-            if (key == KeyEvent.VK_D){
-                p.moveForward((float) Math.PI / 2);
-                
-            }
+            System.out.println("sending");
             p.giveKey(key, true);
-
-            if (key == KeyEvent.VK_RIGHT){
-                p.lookRight();
-                
-            }
-            if (key == KeyEvent.VK_LEFT){
-                p.lookLeft();
-                
-            }
-            if (key == KeyEvent.VK_SPACE){
-                if (p.canShoot() == true){
-                    ArrayList<Enemy> es = getEnemys();
-                    
-                    for (int i = 0; i < es.size(); i++){
-                        if (p.inSights(es.get(i))){
-                            
-                        }
-                    }
-                }
-                
-            }
         }
 
         @Override
@@ -208,10 +168,11 @@ public class GUI{
     public void tick(){
         
         tick++;
+        p.update();
         if (tick > tickTimer){
             
-           
-            //p.update();
+           System.out.println("updating");
+            
             
             //loop through sprite update
             

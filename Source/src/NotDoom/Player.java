@@ -26,19 +26,30 @@ public class Player {
         rot = ( float ) (Math.PI / 4);
         ammoTimer = 30;
         height = 15;
+        characterMap = new HashMap();
+        characterMap.put(KeyEvent.VK_A, false);
+        characterMap.put(KeyEvent.VK_W, false);
+        characterMap.put(KeyEvent.VK_S, false);
+        characterMap.put(KeyEvent.VK_D, false);
+        characterMap.put(KeyEvent.VK_LEFT, false);
+        characterMap.put(KeyEvent.VK_RIGHT, false);
+        characterMap.put(KeyEvent.VK_SPACE, false);
     }
     
     public void update(){
         decAmmoTime();
-        
-        if (characterMap.get(KeyEvent.VK_A))
-            moveForward(270);
+        System.out.println("updating p");
+        System.out.println(characterMap.get(KeyEvent.VK_A) + " THIS IS THE AAAAAAAAAAAAA");
+        if (characterMap.get(KeyEvent.VK_A)){
+            moveForward((float)(Math.PI*1.5));
+            System.out.println("a");
+        }
         if (characterMap.get(KeyEvent.VK_W))
             moveForward(0);
         if (characterMap.get(KeyEvent.VK_S))
-            moveForward(180);
+            moveForward((float)Math.PI);
         if (characterMap.get(KeyEvent.VK_D))
-            moveForward(90);
+            moveForward((float)(Math.PI*.5));
         if (characterMap.get(KeyEvent.VK_LEFT))
             lookLeft();
         if (characterMap.get(KeyEvent.VK_RIGHT))
@@ -70,19 +81,18 @@ public class Player {
     public void giveKey(int k, boolean b){
         
         characterMap.replace(k, b);
+        System.out.println(k + " " + b);
         
     }
     
-    public boolean inSights(Enemy e){
-        float ex = e.getX();
-        float ey = e.getY();
-        float dx = ex - pos.x();
-        float dy = ey - pos.y();
-        
-        //int theta = (int)()
-        
+    public boolean inSights(Enemy e){      
         
         Vector v = worldToLocal(new Vector(e.getX(),e.getY()));
+        if(v.x() < e.width() / 2){
+            return true;
+        }
+        return false;
+        
         
     }
     
@@ -103,6 +113,7 @@ public class Player {
     public void moveForward(float dir){
         pos.moveX((float)(-1 * Math.cos(rot + dir - Math.PI / 2) / moveSpeed));
         pos.moveY((float)(Math.sin(rot + dir - Math.PI / 2) / moveSpeed));
+        System.out.println("i moved");
     }
     
     public void removeAmmo(int amount){
@@ -183,6 +194,11 @@ public class Player {
     }
 
     public Vector worldToLocal(IntVector v) {
+        Vector v1 = new Vector(pos.x() - v.x(), pos.y() - v.y());
+        double angle = Math.atan2(v1.y(), v1.x());
+        return new Vector(v1.magnitude() * (float) Math.cos(angle + rot), v1.magnitude() * (float) Math.sin(angle + rot));
+    }
+    public Vector worldToLocal(Vector v) {
         Vector v1 = new Vector(pos.x() - v.x(), pos.y() - v.y());
         double angle = Math.atan2(v1.y(), v1.x());
         return new Vector(v1.magnitude() * (float) Math.cos(angle + rot), v1.magnitude() * (float) Math.sin(angle + rot));
