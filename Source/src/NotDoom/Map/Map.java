@@ -76,10 +76,10 @@ public class Map {
                             BufferedImage floorTexture = null;
                             BufferedImage ceilingTexture = null;
 
-                            if (split.length > 1) floorHeight = Integer.parseInt(split[1]);
-                            if (split.length > 2) ceilingHeight = Integer.parseInt(split[2]);
-                            if (split.length > 3) floorTexture = textures[Integer.parseInt(split[3])];
-                            if (split.length > 4) ceilingTexture = textures[Integer.parseInt(split[4])];
+                            if (split.length > 1) floorHeight = Integer.parseInt(split[3]);
+                            if (split.length > 2) ceilingHeight = Integer.parseInt(split[4]);
+                            if (split.length > 3) floorTexture = textures[Integer.parseInt(split[1])];
+                            if (split.length > 4) ceilingTexture = textures[Integer.parseInt(split[2])];
                             regionData[index] = new RegionData(ceilingTexture, floorTexture, ceilingHeight, floorHeight);
                             regionTextures[index] = new ArrayList<BufferedImage>();
                             regionVertexes[index] = new ArrayList<IntVector>();
@@ -120,7 +120,10 @@ public class Map {
             IntVector[] tempVertexes = regionVertexes[i].toArray(new IntVector[size]);
             BufferedImage[] tempTextures = regionTextures[i].toArray(new BufferedImage[size]);
             regions[i] = new Region(tempVertexes, tempTextures, regionData[i]);
-            for (int j = 0; j < size; j++) {
+
+        }
+        for (int i = 0; i < regionCount; i++) {
+            for (int j = 0; j < regionVertexes[i].size(); j++) {
                 if (regionNeighbors[i].containsKey(j)) {
                     Region neighbor = regions[regionNeighbors[i].get(j)];
                     regions[i].addNeighbor(j, neighbor);

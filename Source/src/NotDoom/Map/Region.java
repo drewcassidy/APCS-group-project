@@ -102,4 +102,16 @@ public class Region {
         }
         return visibleWalls;
     }
+
+    public Region getNeighbor(int i) {
+        return neighbors[i];
+    }
+
+    public int getFloor() {
+        return regionData.getFloor();
+    }
+
+    public int getCeiling() {
+        return regionData.getCeiling();
+    }
 }

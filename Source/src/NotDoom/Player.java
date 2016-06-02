@@ -12,9 +12,9 @@ public class Player {
         health = 100;
         ammo = 50;
         this.pos = pos;
-        rot = 0;
+        rot = ( float ) (Math.PI / 4);
         ammoTimer = 30;
-        height = 30;
+        height = 15;
     }
     
     public void update(){
@@ -49,8 +49,8 @@ public class Player {
     }
     
     public void moveForward(float dir){
-        pos.moveX((float)(Math.cos(rot + dir) / moveSpeed));
-        pos.moveY((float)(Math.sin(rot + dir) / moveSpeed));
+        pos.moveX((float)(-1 * Math.cos(rot + dir - Math.PI / 2) / moveSpeed));
+        pos.moveY((float)(Math.sin(rot + dir - Math.PI / 2) / moveSpeed));
     }
     
     public void removeAmmo(int amount){
@@ -117,6 +117,9 @@ public class Player {
     
     public void lookRight(){
         lookRight(0.1f);
+    }
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public float getHeight() {

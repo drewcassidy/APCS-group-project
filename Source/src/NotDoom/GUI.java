@@ -2,7 +2,7 @@
 package NotDoom;
 
 
-import NotDoom.Map.Map;
+import NotDoom.Map.*;
 import NotDoom.Renderer.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class GUI{
-    private final int FPS = 10;
+    private final int FPS = 60;
     private JFrame frame;
     
     private Player p;
@@ -221,13 +221,12 @@ public class GUI{
     
     public void render(){
         
-        renderer.clearFrame();
         //mainPanel.removeAll();
         if(tab == true){
             renderer.DrawMap(m);
         }
         else {
-            renderer.DrawRegion(m.currentRegion(), p);
+            renderer.DrawRegionRecursive(m.currentRegion(), p, 0, WIDTH, new ArrayList<Region>());
         }
         renderer.DrawFrame();
         //healthPanel.add(health);
@@ -279,6 +278,7 @@ public class GUI{
         mainPanel.invalidate();
         mainPanel.validate();
         mainPanel.repaint();
+        renderer.clearFrame();
     }
     
     
