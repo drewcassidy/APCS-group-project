@@ -49,13 +49,8 @@ public class GUI{
     private BufferedImage buffer;
     
     
-
-
     public GUI(Map m){
         this.m = m;
-        
-        
-        
         c = new GridBagConstraints();
         
         frame = new JFrame();
@@ -169,7 +164,6 @@ public class GUI{
     }
   
 
-    
     public void tick(){
         
         tick++;
