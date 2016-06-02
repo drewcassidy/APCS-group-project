@@ -34,6 +34,7 @@ public class DoomRenderer {
     private final int HEIGHT;
     private ArrayList<Wall> walls;
     private final int MAPSCALE = 10;
+    private final int FOV = 30;
 
     public DoomRenderer(BufferedImage buffer) {
         this.buffer = buffer;
@@ -45,29 +46,56 @@ public class DoomRenderer {
         
     }
 
-    public void DrawRegion(Region r) {
+    public void DrawRegion(Region r, Player p) {
+        Wall[] walls = r.getWalls();
+            DrawWall(walls[5], p, 0, WIDTH, 0, HEIGHT, 0, 100);
     }
 
     public void DrawPixel(int x, int y, int c) {
-        backBuffer[x + y * WIDTH] = c;
+        if (x >= 0 && x <= WIDTH && y >= 0 && y <= HEIGHT) {
+            backBuffer[x + y * WIDTH] = c;
+        }
     }
 
     public void DrawColumn(int x, int y1, int y2, int height, int offset, BufferedImage texture) {
-        for (int y = y1; y <= y2; y++) {
-            DrawPixel(x, y, texture.getRGB(offset % texture.getWidth(), (int) ((float) (y - y1) / (y2 - y1) * height % texture.getHeight())));
+        int screenHeight = (y2 - y1);
+        float texelsPerPixel = (float) height / (float) screenHeight;
+        int dy = (y1 < 0) ? y1 * -1 : 0;
+        int texY = (int) (dy * texelsPerPixel);
+        float tError = dy * texelsPerPixel % 1;
+        int texX = offset % texture.getWidth();
+        int texHeight = texture.getHeight();
+
+        while(dy <= screenHeight && y1 + dy < HEIGHT) {
+            DrawPixel(x, y1 + dy, texture.getRGB(texX, texY % texHeight));
+            tError += texelsPerPixel;
+            texY += (int) tError;
+            tError %= 1;
+            dy++;
         }
     }
 
     public void DrawWall(Wall w, Player p, int minx, int maxx, int miny, int maxy, int floor, int ceiling) {
         Vector v1 = p.worldToLocal(w.v1());
         Vector v2 = p.worldToLocal(w.v2());
-        int x1 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v1.x() / v1.y()));
-        int x2 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v2.x() / v2.y()));
-        int y1 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (p.getHeight() - floor) / v1.y());
-        int y2 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (p.getHeight() - floor) / v2.y());
-        int h1 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (ceiling - floor) / v1.y());
-        int h2 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (ceiling - floor) / v2.y());
-        
+        int x1 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v1.x() / v1.y()) * 30 / FOV);
+        int x2 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v2.x() / v2.y()) * 30 / FOV);
+        int bot1 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - floor) / v1.y() / FOV);
+        int bot2 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - floor) / v2.y() / FOV);
+        int top1 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - ceiling) / v1.y() / FOV);
+        int top2 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - ceiling) / v2.y() / FOV);
+        int length = (int) (FOV * w.length());
+
+        float xTex = 0;
+        for (int dx = 0; dx <= x2 - x1 && dx + x1 < WIDTH; dx++) {
+            float step = (float) dx / (float) (x2 - x1);
+            int bot = (int) (bot1 + step * (bot2 - bot1));
+            int top = (int) (top1 + step * (top2 - top1));
+            if (dx + x1 >= minx && dx + x1 < maxx) {
+                DrawColumn(dx + x1, top, bot, ceiling - floor, (int) xTex, w.getTexture());
+            }
+            xTex += (float) (ceiling - floor) / (float) (bot - top);
+        }
     }
     
     public void DrawMap(Map m){
@@ -86,7 +114,9 @@ public class DoomRenderer {
         }
 
         Player p = m.getPlayer();
-        drawBox(MAPSCALE * (int) p.getPos().x() - 3, MAPSCALE * (int) p.getPos().y() - 3, 6, 6, 0xFF0000);
+        IntVector v = new IntVector((int) (MAPSCALE * p.getPos().x()), (int) (MAPSCALE * p.getPos().y()));
+        drawBox(v.x() - 3, v.y() - 3, 6, 6, 0xFF0000);
+        DrawLine(v.x(), (int) (Math.cos(p.getRot()) * 10) + v.x(), v.y(), (int) (Math.sin(p.getRot()) * 10) + v.y(), 0xFF0000);
     }
 
     public void DrawLine(int x1, int x2, int y1, int y2, int color){
@@ -155,6 +185,8 @@ public class DoomRenderer {
 
     public void DrawFrame() {
         buffer.setRGB(0, 0, WIDTH, HEIGHT, backBuffer, 0, WIDTH);
+    }
+    public void clearFrame() {
         for (int i = 0; i < backBuffer.length; i++) {
             backBuffer[i] = 0;
         }

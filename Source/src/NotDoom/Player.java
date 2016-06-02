@@ -5,7 +5,7 @@ public class Player {
     private Vector pos;
     private float rot;
     private float height;
-    private final int moveSpeed=60;
+    private final int moveSpeed=30;
     
     
     public Player(Vector pos){
@@ -14,6 +14,7 @@ public class Player {
         this.pos = pos;
         rot = 0;
         ammoTimer = 30;
+        height = 30;
     }
     
     public void update(){
@@ -26,7 +27,8 @@ public class Player {
         float dx = ex - pos.x();
         float dy = ey - pos.y();
         
-        int theta = (int)()
+        //int theta = (int)()
+        return false;
         
         
         
@@ -46,9 +48,9 @@ public class Player {
         return false;
     }
     
-    public void moveForward(int deg){
-        pos.moveX((float)(Math.sin(rot+deg)/moveSpeed));
-        pos.moveY((float)(Math.cos(rot+deg)/moveSpeed));
+    public void moveForward(float dir){
+        pos.moveX((float)(Math.cos(rot + dir) / moveSpeed));
+        pos.moveY((float)(Math.sin(rot + dir) / moveSpeed));
     }
     
     public void removeAmmo(int amount){
@@ -99,31 +101,35 @@ public class Player {
         rot=deg;
     }
     
-    public void lookLeft(float deg){
-        rot+=deg;
-        rot = (rot+360) % 360;
+    public void lookLeft(float drot){
+        rot += drot;
+        rot %= (float) (Math.PI * 2);
     }
     
     public void lookLeft(){
-        lookLeft(1);
+        lookLeft(0.1f);
     }
     
-    public void lookRight(float deg){
-        rot-=deg;
-        rot = (rot+360) % 360;
+    public void lookRight(float drot){
+        rot -= drot;
+        rot = (float) (rot + Math.PI * 2) % (float) (Math.PI * 2);
     }
     
     public void lookRight(){
-        lookRight(1);
+        lookRight(0.1f);
     }
 
     public float getHeight() {
         return height;
     }
+    
+    public float getRot() {
+        return rot;
+    }
 
     public Vector worldToLocal(IntVector v) {
         Vector v1 = new Vector(pos.x() - v.x(), pos.y() - v.y());
         double angle = Math.atan2(v1.y(), v1.x());
-        return new Vector(v1.magnitude() * (float) Math.cos(angle), v1.magnitude() * (float) Math.sin(angle));
+        return new Vector(v1.magnitude() * (float) Math.cos(angle + rot), v1.magnitude() * (float) Math.sin(angle + rot));
     }
 }

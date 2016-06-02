@@ -139,6 +139,7 @@ public class Map {
         for (int i = 0; i < regions.length; i++) {
             if (regions[i].contains(player.getPos())) return regions[i];
         }
+        System.out.println("out of bounds!");
         return null;
     }
 

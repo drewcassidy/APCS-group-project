@@ -59,7 +59,7 @@ public class IntVector {
         int dy1 = v2.y() - v1.y();
         int dy2 = v3.y() - v1.y();
 
-        return ((dx1 * dy2 - dx2 * dy1) >= 0);
+        return ((dx1 * dy2 - dx2 * dy1) < 0);
     }
 
     //checks if the points are in a clockwise order
@@ -69,6 +69,6 @@ public class IntVector {
         float dy1 = v2.y() - v1.y();
         float dy2 = v3.y() - v1.y();
 
-        return ((dx1 * dy2 - dx2 * dy1) >= 0);
+        return ((dx1 * dy2 - dx2 * dy1) < 0);
     }
 }

@@ -48,7 +48,6 @@ public class MainScreen extends JComponent
     
     public void giveRegions(Region[] r){
         
-        System.out.println("I GAT IT");
     }
     
     
