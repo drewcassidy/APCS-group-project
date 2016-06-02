@@ -51,4 +51,8 @@ public class Line {
     public boolean inside(Vector v) {
         return IntVector.clockwise(v1, v2, v);
     }
+
+    public float length() {
+        return (float) Math.sqrt(Math.pow(v1.x() - v2.x(), 2) + Math.pow(v1.y() - v2.y(), 2));
+    }
 }

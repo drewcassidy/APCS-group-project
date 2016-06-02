@@ -34,8 +34,18 @@ public class RegionData {
     // CONSTRUCTOR
 
     public RegionData(BufferedImage ceilingTexture, BufferedImage floorTexture, int ceilingHeight, int floorHeight) {
+        this.ceilingHeight = ceilingHeight;
+        this.floorHeight = floorHeight;
     }
 
 
     // METHODS
+
+    public int getCeiling() {
+        return ceilingHeight;
+    }
+
+    public int getFloor() {
+        return floorHeight;
+    }
 }

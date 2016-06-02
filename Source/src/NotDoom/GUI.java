@@ -2,7 +2,7 @@
 package NotDoom;
 
 
-import NotDoom.Map.Map;
+import NotDoom.Map.*;
 import NotDoom.Renderer.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class GUI{
-    private final int FPS = 30;
+    private final int FPS = 60;
     private JFrame frame;
     
     private Player p;
@@ -90,9 +90,9 @@ public class GUI{
         screen.add(mainScreen);
         
         mainPanel = new JPanel();
-        mainPanel.setLayout(new GridBagLayout());
-        c.gridx = 0;
-        c.gridy = 0;
+        //mainPanel.setLayout(new GridBagLayout());
+        //c.gridx = 0;
+        //c.gridy = 0;
         mainPanel.add(screen, c);
         
         
@@ -110,7 +110,11 @@ public class GUI{
         frame.setResizable(false);
         
         //create player
-        p = new Player(new Vector(0,0));//, m);
+
+        p = new Player(new Vector(0,0));
+
+        p = m.getPlayer();
+
         
         //create enemys
         e = new ArrayList<>();
@@ -140,7 +144,44 @@ public class GUI{
                 mainScreen.tabed(true);
             }
             
+            if (key == KeyEvent.VK_W){
+                p.moveForward(0);
+                
+            }
+            if (key == KeyEvent.VK_A){
+                p.moveForward((float) (3 * (Math.PI / 2)));
+                
+            }
+            if (key == KeyEvent.VK_S){
+                p.moveForward((float) Math.PI);
+                
+            }
+            if (key == KeyEvent.VK_D){
+                p.moveForward((float) Math.PI / 2);
+                
+            }
             p.giveKey(key, true);
+
+            if (key == KeyEvent.VK_RIGHT){
+                p.lookRight();
+                
+            }
+            if (key == KeyEvent.VK_LEFT){
+                p.lookLeft();
+                
+            }
+            if (key == KeyEvent.VK_SPACE){
+                if (p.canShoot() == true){
+                    ArrayList<Enemy> es = getEnemys();
+                    
+                    for (int i = 0; i < es.size(); i++){
+                        if (p.inSights(es.get(i))){
+                            
+                        }
+                    }
+                }
+                
+            }
         }
 
         @Override
@@ -170,7 +211,7 @@ public class GUI{
         if (tick > tickTimer){
             
            
-            p.update();
+            //p.update();
             
             //loop through sprite update
             
@@ -191,68 +232,64 @@ public class GUI{
     
     public void render(){
         
-        
-        mainPanel.removeAll();
-        
+        //mainPanel.removeAll();
         if(tab == true){
             renderer.DrawMap(m);
-            renderer.DrawFrame();
         }
         else {
-            renderer.DrawRegion(m.currentRegion());
-            renderer.DrawPixel(15, tick, 0xFF00FF);
-            renderer.DrawLine( tick, 200, 300, 0, 0x00FF00);
-            renderer.DrawFrame();
+            renderer.DrawRegionRecursive(m.currentRegion(), p, 0, WIDTH, new ArrayList<Region>());
         }
-            //healthPanel.add(health);
-            healthPanel.add(image);
-            
-            //ammoPanel.add(ammo);
-            ammoPanel.add(image2);
+        renderer.DrawFrame();
+        //healthPanel.add(health);
+        //healthPanel.add(image);
+        
+        //ammoPanel.add(ammo);
+        //ammoPanel.add(image2);
 
-            //hotBar.setLayout(new GridLayout(1,2));
-            //hotBar.add(healthPanel);
-            //hotBar.add(ammoPanel);
+        //hotBar.setLayout(new GridLayout(1,2));
+        //hotBar.add(healthPanel);
+        //hotBar.add(ammoPanel);
+        
             
-                
-            screen.add(mainScreen);
-            
-
-            mainPanel.setLayout(new GridBagLayout());
-            c = new GridBagConstraints();        
-            c.fill = GridBagConstraints.NONE;
-            
-            c.gridx = 0;
-            c.gridy = 0;
-            
-            c.gridwidth = 2;
-            //c.gridheight = 2;
-            c.ipady = HEIGHT-100;
-            c.ipadx = WIDTH;
-            
-            mainPanel.add(screen, c);
-            
-            //c.fill = GridBagConstraints.VERTICAL;
-            c.gridx = 0;
-            c.gridy = 1;
-            c.gridwidth = 1;
-            c.ipady = 300;
-            c.ipadx = WIDTH/2;
-            c.anchor = GridBagConstraints.FIRST_LINE_START;
-            
-            mainPanel.add(healthPanel,c);
-            
-            //c.fill = GridBagConstraints.HORIZONTAL;
-            c.gridx = 1;
-            c.gridy = 1;
-            c.gridwidth = 1;
-            c.anchor = GridBagConstraints.FIRST_LINE_START;
-            
-            mainPanel.add(ammoPanel,c);
-         
+        //screen.add(mainScreen);
+        
+/*
+        //mainPanel.setLayout(new GridBagLayout());
+        c = new GridBagConstraints();        
+        c.fill = GridBagConstraints.NONE;
+        
+        c.gridx = 0;
+        c.gridy = 0;
+        
+        c.gridwidth = 2;
+        //c.gridheight = 2;
+        c.ipady = HEIGHT-100;
+        c.ipadx = WIDTH;
+        
+        mainPanel.add(screen, c);
+        
+        //c.fill = GridBagConstraints.VERTICAL;
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.ipady = 300;
+        c.ipadx = WIDTH/2;
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
+        
+        mainPanel.add(healthPanel,c);
+        
+        //c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
+        
+        mainPanel.add(ammoPanel,c);
+    */ 
         mainPanel.invalidate();
         mainPanel.validate();
         mainPanel.repaint();
+        renderer.clearFrame();
     }
     
     
@@ -278,7 +315,6 @@ public class GUI{
             if (delta >= 1){
                 
                 tick();
-                
                 render();
                 
             //display fps(1 line)
@@ -286,12 +322,14 @@ public class GUI{
                 delta = 0;
             
             }
+            /*
             //display fps
             if (timer >= 1000000000){
                 System.out.println("Ticks and Frames " + ticks);
                 ticks = 0;
                 timer = 0;
             }
+                    */
             
             
         }

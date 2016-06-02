@@ -34,6 +34,10 @@ public class DoomRenderer {
     private final int HEIGHT;
     private ArrayList<Wall> walls;
     private final int MAPSCALE = 10;
+    private final float FOV = 0.8f;
+    private final float CLIP = 0.1f;
+    private final int ZSCALE = 10;
+    private final int TEXSCALE = 8;
 
     public DoomRenderer(BufferedImage buffer) {
         this.buffer = buffer;
@@ -45,29 +49,105 @@ public class DoomRenderer {
         
     }
 
-    public void DrawRegion(Region r) {
-    }
+    public void DrawRegion(Region r, Player p) {
+        if (r == null) return;
+        Wall[] walls = r.getWalls();
 
-    public void DrawPixel(int x, int y, int c) {
-        backBuffer[x + y * WIDTH] = c;
-    }
-
-    public void DrawColumn(int x, int y1, int y2, int height, int offset, BufferedImage texture) {
-        for (int y = y1; y <= y2; y++) {
-            DrawPixel(x, y, texture.getRGB(offset % texture.getWidth(), (int) ((float) (y - y1) / (y2 - y1) * height % texture.getHeight())));
+        for (int i = 0; i < walls.length; i++) {
+            DrawWallRecursive(walls[i], p, 0, WIDTH, r.getFloor(), r.getCeiling(), null, null);
         }
     }
 
-    public void DrawWall(Wall w, Player p, int minx, int maxx, int miny, int maxy, int floor, int ceiling) {
+    public void DrawRegionRecursive(Region r, Player p, int minx, int maxx, ArrayList<Region> exclude) {
+        if (r == null) return;
+        if (exclude.size() == 0) {
+            p.setHeight(r.getFloor() + 5);
+        }
+        exclude.add(r);
+        Wall[] walls = r.getWalls();
+        for (int i = 0; i < walls.length; i++) {
+            Region neighbor = r.getNeighbor(i);
+            if (!exclude.contains(neighbor)) {
+                DrawWallRecursive(walls[i], p, minx, maxx, r.getFloor(), r.getCeiling(), neighbor, exclude);
+            }
+            if (neighbor != null) {
+                if (neighbor.getFloor() > r.getFloor()) {
+                    DrawWallRecursive(walls[i], p, minx, maxx, r.getFloor(), neighbor.getFloor(), null, null);
+                }
+                if (neighbor.getCeiling() < r.getCeiling()) {
+                    DrawWallRecursive(walls[i], p, minx, maxx, neighbor.getCeiling(), r.getCeiling(), null, null);
+                }
+            }
+        }
+    }
+
+    public void DrawPixel(int x, int y, int c) {
+        if (x >= 0 && x <= WIDTH && y >= 0 && y <= HEIGHT) {
+            backBuffer[x + y * WIDTH] = c;
+        }
+    }
+
+    public void DrawColumn(int x, int y1, int y2, int height, int offset, BufferedImage texture) {
+        int screenHeight = (y2 - y1);
+        float texelsPerPixel = (float) height / (float) screenHeight;
+        int dy = (y1 < 0) ? y1 * -1 : 0;
+        int texY = (int) (dy * texelsPerPixel);
+        float tError = dy * texelsPerPixel % 1;
+        int texX = (offset + texture.getWidth()) % texture.getWidth();
+        int texHeight = texture.getHeight();
+
+        while(dy <= screenHeight && y1 + dy < HEIGHT) {
+            DrawPixel(x, y1 + dy, texture.getRGB(texX, texY % texHeight));
+            tError += texelsPerPixel;
+            texY += (int) tError;
+            tError %= 1;
+            dy++;
+        }
+    }
+
+    public void DrawWallRecursive(Wall w, Player p, int minx, int maxx, int floor, int ceiling, Region neighbor, ArrayList<Region> exclude) {
         Vector v1 = p.worldToLocal(w.v1());
         Vector v2 = p.worldToLocal(w.v2());
-        int x1 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v1.x() / v1.y()));
-        int x2 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v2.x() / v2.y()));
-        int y1 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (p.getHeight() - floor) / v1.y());
-        int y2 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (p.getHeight() - floor) / v2.y());
-        int h1 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (ceiling - floor) / v1.y());
-        int h2 = (int) ((HEIGHT / 2) + (float) (HEIGHT / 2) * (ceiling - floor) / v2.y());
-        
+        float trim = 1;
+
+        if (v1.y() < CLIP) {
+            float x = v2.x() + (v2.x() - v1.x()) * (CLIP - v2.y()) / (v2.y() - v1.y()); 
+            v1 = new Vector(x, CLIP);
+        }
+
+        if (v2.y() < CLIP) {
+            trim = (CLIP - v1.y()) / (v1.y() - v2.y());
+            float x = v1.x() + (v1.x() - v2.x()) * trim;
+            v2 = new Vector(x, CLIP);
+        }
+
+        int x1 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v1.x() / v1.y()) * FOV);
+        int x2 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v2.x() / v2.y()) * FOV);
+
+        if (neighbor == null) {
+            int bot1 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - floor) / v1.y() / (FOV * ZSCALE));
+            int bot2 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - floor) / v2.y() / (FOV * ZSCALE));
+            int top1 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - ceiling) / v1.y() / (FOV * ZSCALE));
+            int top2 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - ceiling) / v2.y() / (FOV * ZSCALE));
+            float d1 = v1.y();
+            float d2 = v2.y();
+            float length = (TEXSCALE * ZSCALE * w.length());
+
+            for (int dx = 0; dx <= x2 - x1 && dx + x1 < WIDTH; dx++) {
+                float step = ((float) dx / (float) (x2 - x1));
+                float tStep = step * Math.abs(trim);
+                int bot = (int) (bot1 + step * (bot2 - bot1));
+                int top = (int) (top1 + step * (top2 - top1));
+                int u = (int) ((tStep * (length / d2)) / ((1 - tStep) * (1 / d1) + tStep * (1 / d2)));
+                if (dx + x1 >= minx && dx + x1 < maxx) {
+                    DrawColumn(dx + x1, top, bot, TEXSCALE * (ceiling - floor), u, w.getTexture());
+                }
+            }
+        } else {
+            x1 = Math.max(x1, minx);
+            x2 = Math.min(x2, maxx);
+            DrawRegionRecursive(neighbor, p, x1, x2, exclude);
+        }
     }
     
     public void DrawMap(Map m){
@@ -86,7 +166,9 @@ public class DoomRenderer {
         }
 
         Player p = m.getPlayer();
-        drawBox(MAPSCALE * (int) p.getPos().x() - 3, MAPSCALE * (int) p.getPos().y() - 3, 6, 6, 0xFF0000);
+        IntVector v = new IntVector((int) (MAPSCALE * p.getPos().x()), (int) (MAPSCALE * p.getPos().y()));
+        drawBox(v.x() + 7, v.y() + 7, 6, 6, 0xFF0000);
+        DrawLine(10 + v.x(), (int) (10 + Math.sin(p.getRot()) * 10) + v.x(), 10 + v.y(), (int) (10 + Math.cos(p.getRot()) * -10) + v.y(), 0xFF0000);
     }
 
     public void DrawLine(int x1, int x2, int y1, int y2, int color){
@@ -155,6 +237,8 @@ public class DoomRenderer {
 
     public void DrawFrame() {
         buffer.setRGB(0, 0, WIDTH, HEIGHT, backBuffer, 0, WIDTH);
+    }
+    public void clearFrame() {
         for (int i = 0; i < backBuffer.length; i++) {
             backBuffer[i] = 0;
         }

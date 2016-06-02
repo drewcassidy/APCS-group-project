@@ -42,4 +42,8 @@ public class Wall extends Line {
     public boolean visible(Player p) {
         return inside(p.getPos());
     }
+
+    public BufferedImage getTexture() {
+        return texture;
+    }
 }

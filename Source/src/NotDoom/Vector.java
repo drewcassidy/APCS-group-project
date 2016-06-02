@@ -31,11 +31,11 @@ public class Vector {
         this.y = y;
     }
     
-    public void moveX(float am){
-        
+    public void moveX(float dx){
+        x += dx;
     }
-    public void moveY(float am){
-        
+    public void moveY(float dy){
+        y += dy;
     }
 
     // METHODS
