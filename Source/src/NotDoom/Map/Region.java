@@ -114,4 +114,12 @@ public class Region {
     public int getCeiling() {
         return regionData.getCeiling();
     }
+
+    public BufferedImage getFloorTex() {
+        return regionData.getFloorTex();
+    }
+
+    public BufferedImage getCeilingTex() {
+        return regionData.getCeilingTex();
+    }
 }
