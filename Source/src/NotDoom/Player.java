@@ -10,9 +10,12 @@ public class Player {
     private Vector pos;
     private float rot;
     private float height;
+
     private final int moveSpeed=60;
     private HashMap <Integer, Boolean> characterMap;
     private Map m;
+    //private final int moveSpeed=30;
+
     
     
     public Player(Vector pos){//, Map m){
@@ -20,19 +23,9 @@ public class Player {
         health = 100;
         ammo = 50;
         this.pos = pos;
-        rot = 0;
+        rot = ( float ) (Math.PI / 4);
         ammoTimer = 30;
-        
-        characterMap = new HashMap<Integer, Boolean>();
-        characterMap.put(KeyEvent.VK_A, false);
-        characterMap.put(KeyEvent.VK_W, false);
-        characterMap.put(KeyEvent.VK_S, false);
-        characterMap.put(KeyEvent.VK_D, false);
-        characterMap.put(KeyEvent.VK_SPACE, false);
-        characterMap.put(KeyEvent.VK_LEFT, false);
-        characterMap.put(KeyEvent.VK_RIGHT, false);
-        
-        
+        height = 15;
     }
     
     public void update(){
@@ -86,14 +79,10 @@ public class Player {
         float dx = ex - pos.x();
         float dy = ey - pos.y();
         
-        float hyp = (float) Math.sqrt(dx * dx + dy * dy);
-        float theta1 = (float) Math.asin(dx/hyp);
-                
-        float theta = (float)(Math.atan(e.width()/hyp));
+        //int theta = (int)()
         
-        if( rot >= theta1 - theta && rot <= theta1 + theta)
-            return true;
-        return false;
+        
+        Vector v = worldToLocal(new Vector(e.getX(),e.getY()));
         
     }
     
@@ -111,9 +100,9 @@ public class Player {
         return false;
     }
     
-    public void moveForward(int deg){
-        pos.moveX((float)(Math.sin(rot+deg)/moveSpeed));
-        pos.moveY((float)(Math.cos(rot+deg)/moveSpeed));
+    public void moveForward(float dir){
+        pos.moveX((float)(-1 * Math.cos(rot + dir - Math.PI / 2) / moveSpeed));
+        pos.moveY((float)(Math.sin(rot + dir - Math.PI / 2) / moveSpeed));
     }
     
     public void removeAmmo(int amount){
@@ -164,31 +153,38 @@ public class Player {
         rot=deg;
     }
     
-    public void lookLeft(float deg){
-        rot+=deg;
-        rot = (rot+360) % 360;
+    public void lookLeft(float drot){
+        rot += drot;
+        rot %= (float) (Math.PI * 2);
     }
     
     public void lookLeft(){
-        lookLeft(1);
+        lookLeft(0.1f);
     }
     
-    public void lookRight(float deg){
-        rot-=deg;
-        rot = (rot+360) % 360;
+    public void lookRight(float drot){
+        rot -= drot;
+        rot = (float) (rot + Math.PI * 2) % (float) (Math.PI * 2);
     }
     
     public void lookRight(){
-        lookRight(1);
+        lookRight(0.1f);
+    }
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public float getHeight() {
         return height;
     }
+    
+    public float getRot() {
+        return rot;
+    }
 
     public Vector worldToLocal(IntVector v) {
         Vector v1 = new Vector(pos.x() - v.x(), pos.y() - v.y());
         double angle = Math.atan2(v1.y(), v1.x());
-        return new Vector(v1.magnitude() * (float) Math.cos(angle), v1.magnitude() * (float) Math.sin(angle));
+        return new Vector(v1.magnitude() * (float) Math.cos(angle + rot), v1.magnitude() * (float) Math.sin(angle + rot));
     }
 }
