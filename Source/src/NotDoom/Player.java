@@ -135,4 +135,9 @@ public class Player {
         double angle = Math.atan2(v1.y(), v1.x());
         return new Vector(v1.magnitude() * (float) Math.cos(angle + rot), v1.magnitude() * (float) Math.sin(angle + rot));
     }
+    public Vector worldToLocal(Vector v) {
+        Vector v1 = new Vector(pos.x() - v.x(), pos.y() - v.y());
+        double angle = Math.atan2(v1.y(), v1.x());
+        return new Vector(v1.magnitude() * (float) Math.cos(angle + rot), v1.magnitude() * (float) Math.sin(angle + rot));
+    }
 }
