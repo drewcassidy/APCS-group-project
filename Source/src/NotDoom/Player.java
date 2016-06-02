@@ -1,4 +1,9 @@
 package NotDoom;
+
+import NotDoom.Map.Map;
+import java.awt.event.KeyEvent;
+import java.util.HashMap;
+
 public class Player {
     
     private int ammo, health,ammoTimer;  
@@ -6,18 +11,73 @@ public class Player {
     private float rot;
     private float height;
     private final int moveSpeed=60;
+    private HashMap <Integer, Boolean> characterMap;
+    private Map m;
     
     
-    public Player(Vector pos){
+    public Player(Vector pos){//, Map m){
+        this.m = m;
         health = 100;
         ammo = 50;
         this.pos = pos;
         rot = 0;
         ammoTimer = 30;
+        
+        characterMap = new HashMap<Integer, Boolean>();
+        characterMap.put(KeyEvent.VK_A, false);
+        characterMap.put(KeyEvent.VK_W, false);
+        characterMap.put(KeyEvent.VK_S, false);
+        characterMap.put(KeyEvent.VK_D, false);
+        characterMap.put(KeyEvent.VK_SPACE, false);
+        characterMap.put(KeyEvent.VK_LEFT, false);
+        characterMap.put(KeyEvent.VK_RIGHT, false);
+        
+        
     }
     
     public void update(){
         decAmmoTime();
+        
+        if (characterMap.get(KeyEvent.VK_A))
+            moveForward(270);
+        if (characterMap.get(KeyEvent.VK_W))
+            moveForward(0);
+        if (characterMap.get(KeyEvent.VK_S))
+            moveForward(180);
+        if (characterMap.get(KeyEvent.VK_D))
+            moveForward(90);
+        if (characterMap.get(KeyEvent.VK_LEFT))
+            lookLeft();
+        if (characterMap.get(KeyEvent.VK_RIGHT))
+            lookRight();
+        if (characterMap.get(KeyEvent.VK_SPACE)){
+        /*    
+            if ( canShoot() == true ){
+                
+                for ( int i  = 0; i < m.getSprites().length; i++){
+                    
+                    if( inSights (m.getSprites()[i])){
+                        
+                    }
+                    
+                    
+                }
+                
+                
+            }
+            
+           */  
+        }
+           
+        
+        
+        
+    }
+    
+    public void giveKey(int k, boolean b){
+        
+        characterMap.replace(k, b);
+        
     }
     
     public boolean inSights(Enemy e){
@@ -26,9 +86,14 @@ public class Player {
         float dx = ex - pos.x();
         float dy = ey - pos.y();
         
-        int theta = (int)()
+        float hyp = (float) Math.sqrt(dx * dx + dy * dy);
+        float theta1 = (float) Math.asin(dx/hyp);
+                
+        float theta = (float)(Math.atan(e.width()/hyp));
         
-        
+        if( rot >= theta1 - theta && rot <= theta1 + theta)
+            return true;
+        return false;
         
     }
     

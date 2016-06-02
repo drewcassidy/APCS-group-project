@@ -27,4 +27,8 @@ public class Sprite {
     private int width;
     
     
+    public int width(){
+        return width;
+    }
+    
 }

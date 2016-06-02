@@ -145,4 +145,10 @@ public class Map {
     public Player getPlayer() {
         return player;
     }
+    
+    public Sprite[] getSprites(){
+        return sprites;
+    }
+    
+    
 }

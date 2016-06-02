@@ -46,10 +46,7 @@ public class MainScreen extends JComponent
         tab = t;      
     }
     
-    public void giveRegions(Region[] r){
-        
-        System.out.println("I GAT IT");
-    }
+    
     
     
     // This next method will set the preferred size of the image.
