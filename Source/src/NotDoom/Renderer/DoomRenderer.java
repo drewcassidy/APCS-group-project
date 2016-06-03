@@ -39,6 +39,7 @@ public class DoomRenderer {
     private final int STRIPCLIP = 50;
     private final int ZSCALE = 10;
     private final int TEXSCALE = 8;
+    private final int PLANEDIST = 50;
 
     public DoomRenderer(BufferedImage buffer) {
         this.buffer = buffer;
@@ -50,33 +51,30 @@ public class DoomRenderer {
         
     }
 
-    public void DrawRegion(Region r, Player p) {
-        if (r == null) return;
-        Wall[] walls = r.getWalls();
 
-        for (int i = 0; i < walls.length; i++) {
-            DrawWallRecursive(walls[i], p, 0, WIDTH, r.getFloor(), r.getCeiling(), null, null, null, null);
-        }
-    }
 
-    public void DrawRegionRecursive(Region r, Player p, int minx, int maxx, ArrayList<Region> exclude) {
+    public void DrawRegionRecursive(Region r, Player p, int minx, int maxx, int depth) { 
         if (r == null) return;
-        if (exclude.size() == 0) {
+        if (depth == 0) {
             p.setHeight(r.getFloor() + 5);
         }
-        exclude.add(r);
+        if (depth > 3) {
+            return;
+        }
         Wall[] walls = r.getWalls();
         for (int i = 0; i < walls.length; i++) {
             Region neighbor = r.getNeighbor(i);
-            if (!exclude.contains(neighbor)) {
-                DrawWallRecursive(walls[i], p, minx, maxx, r.getFloor(), r.getCeiling(), neighbor, exclude, r.getFloorTex(), r.getCeilingTex());
-            }
+            DrawWallRecursive(walls[i], p, minx, maxx, r.getFloor(), r.getCeiling(), neighbor, r.getFloorTex(), r.getCeilingTex(), depth);
             if (neighbor != null) {
                 if (neighbor.getFloor() > r.getFloor()) {
-                    DrawWallRecursive(walls[i], p, minx, maxx, r.getFloor(), neighbor.getFloor(), null, null, r.getFloorTex(), null);
+                    DrawWallRecursive(walls[i], p, minx, maxx, r.getFloor(), neighbor.getFloor(), null, r.getFloorTex(), null, depth);
+                } else {
+                    DrawWallRecursive(walls[i], p, minx, maxx, r.getFloor(), r.getFloor(), null, r.getFloorTex(), null, depth);
                 }
                 if (neighbor.getCeiling() < r.getCeiling()) {
-                    DrawWallRecursive(walls[i], p, minx, maxx, neighbor.getCeiling(), r.getCeiling(), null, null, null, r.getCeilingTex());
+                    DrawWallRecursive(walls[i], p, minx, maxx, neighbor.getCeiling(), r.getCeiling(), null, null, r.getCeilingTex(), depth);
+                } else { 
+                    DrawWallRecursive(walls[i], p, minx, maxx, r.getCeiling(), r.getCeiling(), null, null, r.getCeilingTex(), depth);
                 }
             }
         }
@@ -106,7 +104,7 @@ public class DoomRenderer {
         }
     }
 
-    public void DrawWallRecursive(Wall w, Player p, int minx, int maxx, int floor, int ceiling, Region neighbor, ArrayList<Region> exclude, BufferedImage floorTex, BufferedImage ceilingTex) {
+    public void DrawWallRecursive(Wall w, Player p, int minx, int maxx, int floor, int ceiling, Region neighbor, BufferedImage floorTex, BufferedImage ceilingTex, int depth) {
         Vector v1 = p.worldToLocal(w.v1());
         Vector v2 = p.worldToLocal(w.v2());
         float trim1 = 1;
@@ -124,52 +122,66 @@ public class DoomRenderer {
             v2 = new Vector(x, CLIP);
         }
 
-        int x1 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v1.x() / v1.y()) * FOV);
-        int x2 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * (v2.x() / v2.y()) * FOV);
+        int x1 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * v1.x() / (v1.y() * FOV));
+        int x2 = (int) ((WIDTH / 2) + (float) (WIDTH / 2) * v2.x() / (v2.y() * FOV));
 
         if (neighbor == null) {
-            int bot1 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - floor) / v1.y() / (FOV * ZSCALE));
-            int bot2 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - floor) / v2.y() / (FOV * ZSCALE));
-            int top1 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - ceiling) / v1.y() / (FOV * ZSCALE));
-            int top2 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - ceiling) / v2.y() / (FOV * ZSCALE));
+            int bot1 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - floor) / (v1.y() * FOV * ZSCALE));
+            int bot2 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - floor) / (v2.y() * FOV * ZSCALE));
+            int top1 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - ceiling) / (v1.y() * FOV * ZSCALE));
+            int top2 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * (p.getHeight() - ceiling) / (v2.y() * FOV * ZSCALE));
             float d1 = v1.y();
             float d2 = v2.y();
             float length = (TEXSCALE * ZSCALE * w.length());
 
-            for (int dx = 0; dx <= x2 - x1 && dx + x1 < WIDTH; dx++) {
+            for (int dx = (x1 < minx) ? (minx - x1) : 0; dx <= x2 - x1 && dx + x1 < WIDTH && dx + x1 < maxx; dx++) {
                 float step = ((float) dx / (float) (x2 - x1));
                 float tStep = step * Math.abs(trim2) * Math.abs(trim1) + (1 - Math.abs(trim1));
                 int bot = (int) (bot1 + step * (bot2 - bot1));
                 int top = (int) (top1 + step * (top2 - top1));
-                int u = (int) (((1 - tStep) * ((1 - Math.abs(trim1)) / d1) + (tStep * (length / d2))) / ((1 - tStep) * (1 / d1) + tStep * (1 / d2)));
+                int u = (int) (((1 - tStep) * (TEXSCALE * (1 - Math.abs(trim1)) / d1) + (tStep * (length / d2))) / ((1 - tStep) * (1 / d1) + tStep * (1 / d2)));
                 if (dx + x1 >= minx && dx + x1 < maxx) {
                     DrawColumn(dx + x1, top, bot, TEXSCALE * (ceiling - floor), u, w.getTexture());
                     if (ceilingTex != null) {
-                        drawStrip(dx + x1, top, (int) p.getHeight() - ceiling, 0, 0, ceilingTex, p.getRot());
+                        drawStrip(dx + x1, top, (int) p.getHeight() - ceiling, p.getX() * TEXSCALE * ZSCALE  / FOV * -1, p.getY() * TEXSCALE * ZSCALE * FOV, ceilingTex, p.getRot());
                     }
                     if (floorTex != null) {
-                        drawStrip(dx + x1, bot, (int) p.getHeight() - floor, 0, 0, floorTex, p.getRot());
+                        drawStrip(dx + x1, bot, (int) p.getHeight() - floor, p.getX() * TEXSCALE * ZSCALE  / FOV * -1, p.getY() * TEXSCALE * ZSCALE * FOV , floorTex, p.getRot());
                     }
+                }
+                if (step > 0.9) {
+                    int n = (int) Math.sqrt(15);
                 }
             }
         } else {
+            if (x1 > maxx || x2 < minx) return;
             x1 = Math.max(x1, minx);
             x2 = Math.min(x2, maxx);
-            DrawRegionRecursive(neighbor, p, x1, x2, exclude);
+            DrawRegionRecursive(neighbor, p, x1, x2, depth + 1);
         }
     }
     
-    public void drawStrip(int x, int y, int h, float u1, int v1, BufferedImage texture, float rot) {
-        float d2 = Math.abs((FOV * ZSCALE * 2 * Math.abs(y - (HEIGHT / 2))) / (WIDTH * h));
-        float d1 = CLIP;
-        float u2 = u1 + (int) (d2 * TEXSCALE);
-        int length = Math.min(y, HEIGHT - y);
+    public void drawStrip(int x, int maxy, int h, float u1, float vOffset, BufferedImage texture, float rot) {
+        //float d2 = Math.abs((FOV * ZSCALE * 2 * Math.abs(y - (HEIGHT / 2))) / (WIDTH * h));
+        maxy = Math.min(maxy, HEIGHT - 1 - maxy);
+        float d1 = (float) Math.abs((float) h / (float) ZSCALE / FOV / (float) TEXSCALE);
+        float d2 = PLANEDIST;
+        float u2 = ((d2 - d1) * TEXSCALE * ZSCALE * 10);
+        float v1 = (x - (WIDTH / 2)) / 4;
+        int y1 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * -1 * Math.abs(h) / (d1 * FOV * ZSCALE * TEXSCALE));
+        int y2 = (int) ((HEIGHT / 2) + (float) (WIDTH / 2) * -1 * Math.abs(h) / (d2 * FOV * ZSCALE * TEXSCALE));
+        int length = Math.abs(y1 - y2);
+        float sin = (float) Math.sin(rot);
+        float cos = (float) Math.cos(rot); //store trig values for more fastness
 
-        for (int dy = 0; dy < length; dy++) {
-            float step = (float) dy / (float) length;
-            float u = (((((1 - step) * (u1 / d1))) + (step * (u2 / d2))) / (((1 - step) / d1) + (step / d2)));
-            int color = texture.getRGB(v1, (int) u);
-            DrawPixel(x, (h < 0) ? dy : HEIGHT - 1 - dy, color);
+        for (int dy = (y1 < 0) ? (y1 * -1) : 0; dy + y1 < y2 && y1 + dy < HEIGHT && dy + y1 < maxy; dy++) {
+            float step = (float) (dy) / (float) length;
+            float u = correctUV(step, 0, u2, d1, d2);
+            float v = v1 / (1.0f - step);
+            float vRot = (u * cos - v * sin) - vOffset;
+            float uRot = (u * sin + v * cos) + u1;
+            int color = texture.getRGB((int) Math.floorMod((int) vRot, texture.getWidth()), (int) Math.floorMod((int) uRot, texture.getHeight()));
+            DrawPixel(x, (h <= 0) ? y1 + dy : HEIGHT - 1 - (y1 + dy), color);
         }
     }
     
@@ -265,5 +277,9 @@ public class DoomRenderer {
         for (int i = 0; i < backBuffer.length; i++) {
             backBuffer[i] = 0;
         }
+    }
+
+    private float correctUV(float step, float u1, float u2, float d1, float d2) {
+        return (((((1 - step) * (u1 / d1))) + (step * (u2 / d2))) / (((1 - step) / d1) + (step / d2)));
     }
 }

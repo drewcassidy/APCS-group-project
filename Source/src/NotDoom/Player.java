@@ -11,7 +11,7 @@ public class Player {
     private float rot;
     private float height;
 
-    private final int moveSpeed=60;
+    private final int moveSpeed=15;
     private HashMap <Integer, Boolean> characterMap;
     private Map m;
     //private final int moveSpeed=30;
@@ -38,11 +38,8 @@ public class Player {
     
     public void update(){
         decAmmoTime();
-        System.out.println("updating p");
-        System.out.println(characterMap.get(KeyEvent.VK_A) + " THIS IS THE AAAAAAAAAAAAA");
         if (characterMap.get(KeyEvent.VK_A)){
             moveForward((float)(Math.PI*1.5));
-            System.out.println("a");
         }
         if (characterMap.get(KeyEvent.VK_W))
             moveForward(0);
@@ -51,9 +48,9 @@ public class Player {
         if (characterMap.get(KeyEvent.VK_D))
             moveForward((float)(Math.PI*.5));
         if (characterMap.get(KeyEvent.VK_LEFT))
-            lookLeft();
-        if (characterMap.get(KeyEvent.VK_RIGHT))
             lookRight();
+        if (characterMap.get(KeyEvent.VK_RIGHT))
+            lookLeft();
         if (characterMap.get(KeyEvent.VK_SPACE)){
         /*    
             if ( canShoot() == true ){
@@ -81,8 +78,6 @@ public class Player {
     public void giveKey(int k, boolean b){
         
         characterMap.replace(k, b);
-        System.out.println(k + " " + b);
-        
     }
     
     public boolean inSights(Enemy e){      
@@ -113,7 +108,6 @@ public class Player {
     public void moveForward(float dir){
         pos.moveX((float)(-1 * Math.cos(rot + dir - Math.PI / 2) / moveSpeed));
         pos.moveY((float)(Math.sin(rot + dir - Math.PI / 2) / moveSpeed));
-        System.out.println("i moved");
     }
     
     public void removeAmmo(int amount){
@@ -164,21 +158,21 @@ public class Player {
         rot=deg;
     }
     
-    public void lookLeft(float drot){
+    public void lookRight(float drot){
         rot += drot;
         rot %= (float) (Math.PI * 2);
     }
     
-    public void lookLeft(){
+    public void lookRight(){
         lookLeft(0.1f);
     }
     
-    public void lookRight(float drot){
+    public void lookLeft(float drot){
         rot -= drot;
         rot = (float) (rot + Math.PI * 2) % (float) (Math.PI * 2);
     }
     
-    public void lookRight(){
+    public void lookLeft(){
         lookRight(0.1f);
     }
     public void setHeight(int height) {

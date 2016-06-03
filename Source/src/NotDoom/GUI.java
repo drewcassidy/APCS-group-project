@@ -140,7 +140,6 @@ public class GUI{
                 mainScreen.tabed(true);
             }
             
-            System.out.println("sending");
             p.giveKey(key, true);
         }
 
@@ -171,13 +170,9 @@ public class GUI{
         p.update();
         if (tick > tickTimer){
             
-           System.out.println("updating");
-            
-            
             //loop through sprite update
             
             tick = 0;
-            System.out.println("Word");
         }
         
     }
@@ -198,7 +193,7 @@ public class GUI{
             renderer.DrawMap(m);
         }
         else {
-            renderer.DrawRegionRecursive(m.currentRegion(), p, 0, WIDTH, new ArrayList<Region>());
+            renderer.DrawRegionRecursive(m.currentRegion(), p, 0, WIDTH, 0);
         }
         renderer.DrawFrame();
         //healthPanel.add(health);
